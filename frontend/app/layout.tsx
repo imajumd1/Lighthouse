@@ -6,6 +6,7 @@ import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
 import { AppProvider } from "../context/AppContext";
 import Navbar from "../components/Navbar";
+import AskLighthouse from "../components/AskLighthouse";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -176,6 +177,7 @@ export default function RootLayout({
           <main className="flex-grow">
             {children}
           </main>
+          <AskLighthouse />
         </AppProvider>
       </body>
     </html>

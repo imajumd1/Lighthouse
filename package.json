@@ -2,10 +2,16 @@
   "name": "template",
   "version": "1.0.0",
   "private": true,
-  "workspaces": ["frontend"],
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
     "dev": "npm run dev -w frontend",
     "build": "npm run build -w frontend",
     "start": "npm run start -w frontend"
+  },
+  "dependencies": {
+    "framer-motion": "^12.34.3",
+    "nextjs-toploader": "^3.9.17"
   }
 }

@@ -7,12 +7,14 @@ import { motion } from 'framer-motion';
 import { useApp } from '../../context/AppContext';
 import { Trend } from '../../lib/types';
 import Button from '../../components/ui/Button';
+import ShareModal from '../../components/ShareModal';
 
 export default function TrendDetailPage() {
   const { id } = useParams();
   const router = useRouter();
   const { trends, verticals, isBookmarked, toggleBookmark, user, isLoading } = useApp();
   const [trend, setTrend] = useState<Trend | null>(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading) {
@@ -36,9 +38,17 @@ export default function TrendDetailPage() {
 
   const getVertical = (id: string) => verticals.find(v => v.id === id);
   const bookmarked = isBookmarked(trend.id);
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
 
   return (
     <div className="min-h-screen bg-slate-950 pb-20">
+      <ShareModal 
+        isOpen={isShareModalOpen} 
+        onClose={() => setIsShareModalOpen(false)} 
+        title={trend.title}
+        url={currentUrl}
+      />
+
       {/* Hero Section */}
       <div className="relative h-[40vh] min-h-[400px] w-full overflow-hidden">
         <div className="absolute inset-0 bg-slate-900">
@@ -180,6 +190,18 @@ export default function TrendDetailPage() {
                   </Link>
                 )}
 
+                <Button 
+                  variant="secondary" 
+                  fullWidth 
+                  onClick={() => setIsShareModalOpen(true)}
+                  className="flex items-center justify-center gap-2"
+                >
+                  Share Trend
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                  </svg>
+                </Button>
+
                 <a 
                   href={trend.sourceUrl} 
                   target="_blank" 
@@ -193,24 +215,6 @@ export default function TrendDetailPage() {
                     </svg>
                   </Button>
                 </a>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-white/10">
-                <h4 className="text-sm font-medium text-slate-400 mb-3">Share this trend</h4>
-                <div className="flex gap-2">
-                  <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors">
-                    <span className="sr-only">Copy Link</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
-                    </svg>
-                  </button>
-                  <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors">
-                    <span className="sr-only">Email</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                    </svg>
-                  </button>
-                </div>
               </div>
             </motion.div>
           </div>

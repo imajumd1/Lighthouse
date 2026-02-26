@@ -87,10 +87,10 @@ export const MOCK_TRENDS: Trend[] = [
     howConsultanciesLeverage: 'Consultancies can offer "Compliance-as-a-Service" platforms powered by GenAI, or provide implementation services for custom compliance bots. There is also a significant opportunity in auditing these AI systems for hallucination risks.',
     analysisDetail: 'The convergence of LLMs with regulatory technology (RegTech) is creating a new paradigm. Unlike previous waves of automation that relied on structured data, GenAI can parse unstructured regulatory texts, policy documents, and communication logs. This allows for "intent-based" compliance monitoring rather than just keyword matching. However, the "black box" nature of these models poses a challenge, necessitating new governance frameworks that consultancies are well-positioned to design.',
     affectedVerticals: ['v2', 'v6', 'v8'],
-    sourceUrl: 'https://www.ft.com/content/genai-compliance',
+    sourceUrl: 'https://www.ft.com/artificial-intelligence',
     additionalSources: [
-      { id: 's1', title: 'The Future of RegTech', url: 'https://www2.deloitte.com/insights', publisher: 'Deloitte Insights', date: '2023-10-10' },
-      { id: 's2', title: 'AI Principles', url: 'https://oecd.ai', publisher: 'OECD AI Policy Observatory', date: '2023-09-15' }
+      { id: 's1', title: 'The Future of RegTech', url: 'https://www2.deloitte.com/us/en/insights/industry/financial-services/regulatory-technology-regtech-fintech.html', publisher: 'Deloitte Insights', date: '2023-10-10' },
+      { id: 's2', title: 'AI Principles', url: 'https://oecd.ai/en/ai-principles', publisher: 'OECD AI Policy Observatory', date: '2023-09-15' }
     ],
     status: 'current',
     dateAdded: '2023-10-15T10:00:00Z',
@@ -107,8 +107,8 @@ export const MOCK_TRENDS: Trend[] = [
     affectedVerticals: ['v1', 'v5'],
     sourceUrl: 'https://blogs.nvidia.com/blog/category/deep-learning/',
     additionalSources: [
-      { id: 's3', title: 'Generative AI in Pharma', url: 'https://www.mckinsey.com/industries/life-sciences/our-insights', publisher: 'McKinsey Insights', date: '2023-10-05' },
-      { id: 's4', title: 'AlphaFold Latest', url: 'https://deepmind.google/discover/blog/', publisher: 'Google DeepMind Blog', date: '2023-09-20' }
+      { id: 's3', title: 'Generative AI in Pharma', url: 'https://www.mckinsey.com/industries/life-sciences/our-insights/generative-ai-in-the-pharmaceutical-industry-moving-from-hype-to-reality', publisher: 'McKinsey Insights', date: '2023-10-05' },
+      { id: 's4', title: 'AlphaFold Latest', url: 'https://deepmind.google/discover/blog/alphafold-latest-research/', publisher: 'Google DeepMind Blog', date: '2023-09-20' }
     ],
     status: 'current',
     dateAdded: '2023-10-18T14:30:00Z',
@@ -125,7 +125,7 @@ export const MOCK_TRENDS: Trend[] = [
     affectedVerticals: ['v3', 'v10'],
     sourceUrl: 'https://www.bcg.com/capabilities/artificial-intelligence/insights',
     additionalSources: [
-      { id: 's5', title: 'Personalization at Scale', url: 'https://hbr.org/topic/artificial-intelligence', publisher: 'Harvard Business Review', date: '2023-10-12' }
+      { id: 's5', title: 'Personalization at Scale', url: 'https://hbr.org/2023/05/how-generative-ai-will-change-sales', publisher: 'Harvard Business Review', date: '2023-10-12' }
     ],
     status: 'current',
     dateAdded: '2023-10-20T09:15:00Z',
@@ -176,7 +176,7 @@ export const MOCK_TRENDS: Trend[] = [
     affectedVerticals: ['v6', 'v2', 'v5'],
     sourceUrl: 'https://hbr.org/topic/law-and-legal-issues',
     additionalSources: [
-      { id: 's8', title: 'Legal AI Trends', url: 'https://www.theinformation.com/', publisher: 'The Information', date: '2023-11-01' }
+      { id: 's8', title: 'Legal AI Trends', url: 'https://www.theinformation.com/topics/artificial-intelligence', publisher: 'The Information', date: '2023-11-01' }
     ],
     status: 'current',
     dateAdded: '2023-10-28T08:00:00Z',
@@ -244,7 +244,7 @@ export const MOCK_TRENDS: Trend[] = [
     affectedVerticals: ['v8', 'v5', 'v1'],
     sourceUrl: 'https://www.brookings.edu/topic/artificial-intelligence/',
     additionalSources: [
-      { id: 's12', title: 'AI Governance', url: 'https://oecd.ai', publisher: 'OECD AI Policy Observatory', date: '2023-11-09' }
+      { id: 's12', title: 'AI Governance', url: 'https://oecd.ai/en/ai-principles', publisher: 'OECD AI Policy Observatory', date: '2023-11-09' }
     ],
     status: 'current',
     dateAdded: '2023-11-08T09:00:00Z',

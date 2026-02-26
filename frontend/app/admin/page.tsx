@@ -7,10 +7,12 @@ import { Trend } from '../../lib/types';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Link from 'next/link';
+import { APPROVED_SOURCES } from '../../lib/data';
 
 export default function AdminDashboard() {
   const { user, trends, addTrend, archiveTrend, verticals } = useApp();
   const [isAdding, setIsAdding] = useState(false);
+  const [showSources, setShowSources] = useState(false);
   
   // Form State
   const [url, setUrl] = useState('');
@@ -90,10 +92,43 @@ export default function AdminDashboard() {
             <h1 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h1>
             <p className="text-slate-400">Manage trends and content curation.</p>
           </div>
-          <Button onClick={() => setIsAdding(!isAdding)}>
-            {isAdding ? 'Cancel' : 'Add New Trend'}
-          </Button>
+          <div className="flex gap-4">
+            <Button variant="secondary" onClick={() => setShowSources(!showSources)}>
+              {showSources ? 'Hide Sources' : 'View Approved Sources'}
+            </Button>
+            <Button onClick={() => setIsAdding(!isAdding)}>
+              {isAdding ? 'Cancel' : 'Add New Trend'}
+            </Button>
+          </div>
         </div>
+
+        {/* Approved Sources Panel */}
+        {showSources && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="mb-12 bg-slate-900/50 border border-white/10 rounded-2xl p-8"
+          >
+            <h2 className="text-xl font-bold text-white mb-6">Approved Source List</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {Object.entries(APPROVED_SOURCES).map(([category, sources]) => (
+                <div key={category}>
+                  <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-3">
+                    {category.replace(/([A-Z])/g, ' $1').trim()}
+                  </h3>
+                  <ul className="space-y-2">
+                    {sources.map((source, idx) => (
+                      <li key={idx} className="text-sm text-slate-400 flex items-start gap-2">
+                        <span className="w-1 h-1 bg-slate-600 rounded-full mt-2 flex-shrink-0" />
+                        {source}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* Add Trend Form */}
         {isAdding && (

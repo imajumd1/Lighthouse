@@ -108,7 +108,7 @@ export const MOCK_TRENDS: Trend[] = [
     sourceUrl: 'https://blogs.nvidia.com/blog/category/deep-learning/',
     additionalSources: [
       { id: 's3', title: 'Generative AI in Pharma', url: 'https://www.mckinsey.com/industries/life-sciences/our-insights/generative-ai-in-the-pharmaceutical-industry-moving-from-hype-to-reality', publisher: 'McKinsey Insights', date: '2023-10-05' },
-      { id: 's4', title: 'AlphaFold Latest', url: 'https://deepmind.google/discover/blog/alphafold-latest-research/', publisher: 'Google DeepMind Blog', date: '2023-09-20' }
+      { id: 's4', title: 'AlphaFold Latest', url: 'https://deepmind.google/discover/blog/alphafold-3-predicts-the-structure-and-interactions-of-all-lifes-molecules/', publisher: 'Google DeepMind Blog', date: '2023-09-20' }
     ],
     status: 'current',
     dateAdded: '2023-10-18T14:30:00Z',

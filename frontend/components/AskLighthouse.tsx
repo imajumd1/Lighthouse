@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useApp } from '../context/AppContext';
-import Button from './ui/Button';
 
 interface Message {
   id: string;
@@ -13,33 +12,112 @@ interface Message {
   timestamp: Date;
 }
 
-// Mock Knowledge Base for General Strategic Questions
-const KNOWLEDGE_BASE = [
-  {
-    keywords: ['saas', 'software', 'doomed', 'seat-based'],
-    response: "**Executive Perspective:** SaaS isn't doomed, but the *seat-based pricing model* is facing an existential threat. \n\nWe are witnessing a shift toward **Service-as-Software** (outcome-based pricing). \n\n1. **The Shift:** Legacy SaaS apps that merely add AI as a 'copilot' feature will struggle against AI-native apps that replace entire workflows.\n2. **Financial Impact:** Expect margin compression in horizontal SaaS (CRM, HRIS) as AI features become commoditized.\n3. **Opportunity:** Vertical AI agents that own the 'execution layer' will command premium valuations."
+// --- Dynamic Response Engine ---
+
+const TOPICS = {
+  saas: {
+    keywords: ['saas', 'software', 'subscription', 'seat-based', 'salesforce', 'crm'],
+    insights: [
+      "The 'seat-based' pricing model is facing existential decay. AI agents don't need seats.",
+      "We are shifting from SaaS (Software as a Service) to SaS (Service as Software) - outcome-based pricing.",
+      "Vertical SaaS is resilient; Horizontal SaaS (like generic CRMs) faces massive commoditization pressure.",
+      "The marginal cost of software creation is approaching zero, forcing value capture to shift to proprietary data."
+    ],
+    risks: [
+      "Churn rates increasing as customers replace tools with custom AI agents.",
+      "Margin compression due to high inference costs embedded in features.",
+      "Legacy codebases becoming liabilities vs AI-native startups."
+    ]
   },
-  {
-    keywords: ['agent', 'autonomous', 'future', 'next big thing'],
-    response: "**Trend Analysis:** Autonomous agents represent the next major platform shift after Mobile and Cloud.\n\n**Projection:** By 2025, we project 40% of enterprise software interactions will be non-human (agent-to-agent).\n\n**Strategic Imperative:** Your immediate priority should be building 'agent-ready' APIs. If your data isn't accessible to agents, your application becomes invisible in the new stack."
+  agents: {
+    keywords: ['agent', 'autonomous', 'agentic', 'auto-gpt', 'babyagi'],
+    insights: [
+      "Agents are the new 'apps'. The interface of the future is no interface.",
+      "Multi-agent orchestration (swarms) is where the real enterprise value lies, not single chatbots.",
+      "We project 40% of enterprise workflows will be agent-led by 2026.",
+      "The bottleneck isn't intelligence anymore; it's reliability and error handling."
+    ],
+    risks: [
+      "Infinite loops and runaway cloud costs.",
+      "Lack of auditability in decision chains.",
+      "Security vulnerabilities in agent-to-agent authentication."
+    ]
   },
-  {
-    keywords: ['gpu', 'compute', 'nvidia', 'infrastructure', 'cost'],
-    response: "**Infrastructure Outlook:** While GPU scarcity is stabilizing, *inference costs* are becoming the new bottleneck for scaling AI.\n\n**Recommendation:** Do not rely solely on frontier models (like GPT-4) for all tasks. Adopt a **tiered model strategy**:\n- Use Frontier Models for complex reasoning.\n- Use SLMs (Small Language Models) for routine, high-volume tasks to protect margins."
+  hardware: {
+    keywords: ['gpu', 'nvidia', 'compute', 'chips', 'hardware', 'infrastructure', 'h100'],
+    insights: [
+      "Inference compute is the new oil. Training costs are one-time; inference is forever.",
+      "We are seeing a shift from 'bigger is better' to 'smaller is smarter' (SLMs on edge devices).",
+      "NVIDIA's moat is software (CUDA), not just hardware, but AMD is catching up.",
+      "Enterprises are repatriating workloads from cloud to on-prem for cost control."
+    ],
+    risks: [
+      "Supply chain concentration risk in Taiwan.",
+      "Energy consumption becoming a sustainability/ESG red flag.",
+      "Rapid depreciation of hardware assets as new chips launch."
+    ]
   },
-  {
-    keywords: ['regulation', 'law', 'eu ai act', 'compliance'],
-    response: "**Regulatory Landscape:** The era of self-regulation is over. The EU AI Act is setting the global standard (the 'Brussels Effect').\n\n**Risk:** The biggest exposure for enterprises isn't fines, but **reputational damage** and **forced model deletion** if data lineage cannot be proven. \n\n**Action:** Implement a 'Model Bill of Materials' (MBOM) for every AI deployment immediately."
+  regulation: {
+    keywords: ['regulation', 'law', 'eu ai act', 'compliance', 'gdpr', 'legal', 'copyright'],
+    insights: [
+      "The EU AI Act is the 'Brussels Effect' 2.0 - setting the global baseline.",
+      "Copyright law is the sleeping giant. IP indemnification is now a key vendor selection criteria.",
+      "Shadow AI (employees using unsanctioned tools) is the #1 immediate compliance threat.",
+      "Governments are moving from 'hands-off' to 'sovereign AI' strategies."
+    ],
+    risks: [
+      "Retroactive model deletion orders.",
+      "Massive fines for non-compliance (up to 7% of global turnover).",
+      "Reputational damage from biased algorithmic decisions."
+    ]
   },
-  {
-    keywords: ['job', 'workforce', 'replace', 'hiring'],
-    response: "**Workforce Transformation:** AI is not replacing jobs; it is replacing *tasks*. \n\n**Impact:** We are seeing a 'hollowing out' of mid-level cognitive tasks (data entry, basic analysis, tier-1 support). \n\n**Strategy:** Reallocate headcount budget from execution roles to **oversight and orchestration** roles. The most valuable employee skill in 2025 will be 'AI Literacy' and 'Prompt Engineering'."
+  workforce: {
+    keywords: ['job', 'work', 'replace', 'hiring', 'employee', 'labor', 'talent'],
+    insights: [
+      "AI isn't replacing jobs; it's replacing tasks. The job description is just changing.",
+      "We are seeing a 'hollowing out' of junior roles. The apprenticeship model is broken.",
+      "Prompt Engineering is a transitional skill. 'AI Literacy' and 'System Thinking' are durable.",
+      "Productivity gains are real (30-50%), but capturing that value requires organizational redesign."
+    ],
+    risks: [
+      "Cultural resistance and 'quiet quitting'.",
+      "Loss of institutional knowledge as senior experts retire without training juniors.",
+      "Over-reliance on AI outputs leading to skill atrophy."
+    ]
   },
-  {
-    keywords: ['build', 'buy', 'vendor'],
-    response: "**Build vs. Buy Strategy:**\n\n- **BUY** for commodity capabilities (email drafting, meeting summaries, basic code gen). The vendor market is moving too fast to compete.\n- **BUILD** (or fine-tune) for core differentiation where you have proprietary data that no competitor can access.\n\n**Warning:** Avoid building 'wrappers' around public APIs that offer no defensible moat."
+  strategy: {
+    keywords: ['build', 'buy', 'strategy', 'roadmap', 'invest', 'roi'],
+    insights: [
+      "Don't build 'wrappers'. Build workflows that own the data.",
+      "Data is the only defensible moat. Models are becoming commodities.",
+      "The 'Build vs Buy' calculus has shifted. Buy for utility, Build for differentiation.",
+      "ROI timelines have compressed. If it doesn't show value in 3 months, kill it."
+    ],
+    risks: [
+      "Vendor lock-in with closed ecosystems.",
+      "Technical debt from rapid prototyping.",
+      "Investing in 'features' that Big Tech will release for free next month."
+    ]
   }
+};
+
+const INTROS = [
+  "That's a critical question. Looking at the latest market signals...",
+  "From a strategic perspective, the landscape is shifting rapidly here.",
+  "Our analysis suggests a contrarian view on this.",
+  "The data is quite clear, though often misunderstood.",
+  "Let's break this down. The conventional wisdom is wrong here."
 ];
+
+const OUTROS = [
+  "The window of opportunity to act is narrowing.",
+  "I'd recommend auditing your current exposure to this immediately.",
+  "This will likely be the defining theme of the next 12 months.",
+  "Winners will be decided by who executes on this in Q3.",
+  "Does that align with what you're seeing in your organization?"
+];
+
+// --- Component ---
 
 const AskLighthouse = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,6 +139,36 @@ const AskLighthouse = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping, isOpen]);
+
+  const generateDynamicResponse = (query: string) => {
+    const lowerQuery = query.toLowerCase();
+    
+    // 1. Identify Topics
+    const matchedTopics: string[] = [];
+    Object.entries(TOPICS).forEach(([key, data]) => {
+      if (data.keywords.some(k => lowerQuery.includes(k))) {
+        matchedTopics.push(key);
+      }
+    });
+
+    // 2. Construct Response
+    if (matchedTopics.length > 0) {
+      // Pick the primary topic (first match)
+      const primaryTopicKey = matchedTopics[0] as keyof typeof TOPICS;
+      const topicData = TOPICS[primaryTopicKey];
+      
+      // Randomly select components to ensure variety
+      const intro = INTROS[Math.floor(Math.random() * INTROS.length)];
+      const insight = topicData.insights[Math.floor(Math.random() * topicData.insights.length)];
+      const risk = topicData.risks[Math.floor(Math.random() * topicData.risks.length)];
+      const outro = OUTROS[Math.floor(Math.random() * OUTROS.length)];
+
+      return `**${intro}**\n\n${insight}\n\n**Key Risk Factor:**\n${risk}\n\n${outro}`;
+    }
+
+    // 3. Fallback for unknown queries (General Consultant Speak)
+    return "That is a nuanced strategic question. While I don't have a specific pre-trained answer for that exact phrase, I can tell you that **data sovereignty** and **model governance** are the two most critical themes across all our current intelligence. \n\nWould you like me to analyze the impact of these themes on a specific vertical like Healthcare or Finance?";
+  };
 
   const generateResponse = (query: string) => {
     const lowerQuery = query.toLowerCase();
@@ -84,20 +192,8 @@ const AskLighthouse = () => {
       return `**Strategic Analysis of ${currentTrend.headline}:**\n\nThis trend is currently in the **${currentTrend.timeHorizon}** horizon with a confidence score of **${currentTrend.confidenceScore}/10**.\n\n**Why it matters:** ${currentTrend.whyTrend}\n\n**Recommendation:** ${currentTrend.actionGuidance}`;
     }
 
-    // 2. Check Knowledge Base for General Strategic Questions
-    for (const entry of KNOWLEDGE_BASE) {
-      if (entry.keywords.some(keyword => lowerQuery.includes(keyword))) {
-        return entry.response;
-      }
-    }
-
-    // 3. General Trend/Market Queries
-    if (lowerQuery.includes('trend') || lowerQuery.includes('hot') || lowerQuery.includes('new')) {
-      return "Based on our real-time index, **Generative AI in Regulatory Compliance** and **AI in Media Content Creation** are showing the highest momentum this week. Both are rated 'Accelerating' with strong capital backing.";
-    }
-    
-    // 4. Fallback for unknown queries
-    return "That is a nuanced strategic question. While I don't have a specific pre-trained answer for that exact phrase, I can tell you that **data sovereignty** and **model governance** are the two most critical themes across all our current intelligence. \n\nWould you like me to analyze the impact of these themes on a specific vertical like Healthcare or Finance?";
+    // 2. Use Dynamic Engine
+    return generateDynamicResponse(query);
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -116,7 +212,7 @@ const AskLighthouse = () => {
     setIsTyping(true);
 
     // Simulate AI processing time (randomized for realism)
-    const delay = Math.floor(Math.random() * 1000) + 1000; // 1-2 seconds
+    const delay = Math.floor(Math.random() * 1500) + 1000; // 1-2.5 seconds
     
     setTimeout(() => {
       const responseText = generateResponse(userMsg.content);

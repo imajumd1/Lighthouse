@@ -36,6 +36,13 @@ export default function AdminDashboard() {
   const [selectedVerticals, setSelectedVerticals] = useState<string[]>([]);
   const [isFetching, setIsFetching] = useState(false);
 
+  // Heat Map Scores
+  const [capabilityMaturity, setCapabilityMaturity] = useState(5);
+  const [capitalBacking, setCapitalBacking] = useState(5);
+  const [enterpriseAdoption, setEnterpriseAdoption] = useState(5);
+  const [regulatoryFriction, setRegulatoryFriction] = useState(5);
+  const [competitiveIntensity, setCompetitiveIntensity] = useState(5);
+
   if (!user || user.role !== 'admin') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
@@ -76,6 +83,13 @@ export default function AdminDashboard() {
       timeHorizon,
       confidenceScore,
       confidenceReasoning,
+      heatMapScores: {
+        capabilityMaturity,
+        capitalBacking,
+        enterpriseAdoption,
+        regulatoryFriction,
+        competitiveIntensity
+      },
       marketValidation,
       financialSignal,
       competitiveIntelligence,
@@ -113,6 +127,11 @@ export default function AdminDashboard() {
     setTrendMomentum('Early Signal');
     setActionGuidance('');
     setSelectedVerticals([]);
+    setCapabilityMaturity(5);
+    setCapitalBacking(5);
+    setEnterpriseAdoption(5);
+    setRegulatoryFriction(5);
+    setCompetitiveIntensity(5);
   };
 
   const toggleVertical = (id: string) => {
@@ -251,6 +270,33 @@ export default function AdminDashboard() {
                     <option>Accelerating</option>
                     <option>Mainstream Adoption</option>
                   </select>
+                </div>
+              </div>
+
+              {/* Heat Map Scores */}
+              <div className="bg-slate-800/50 rounded-xl p-6 border border-white/5">
+                <h3 className="text-sm font-semibold text-white mb-4">AI Disruption Heat Map Scores (1-10)</h3>
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">Capability Maturity</label>
+                    <input type="number" min="1" max="10" className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-lg text-white" value={capabilityMaturity} onChange={(e) => setCapabilityMaturity(parseInt(e.target.value))} />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">Capital Backing</label>
+                    <input type="number" min="1" max="10" className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-lg text-white" value={capitalBacking} onChange={(e) => setCapitalBacking(parseInt(e.target.value))} />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">Enterprise Adoption</label>
+                    <input type="number" min="1" max="10" className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-lg text-white" value={enterpriseAdoption} onChange={(e) => setEnterpriseAdoption(parseInt(e.target.value))} />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">Regulatory Friction</label>
+                    <input type="number" min="1" max="10" className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-lg text-white" value={regulatoryFriction} onChange={(e) => setRegulatoryFriction(parseInt(e.target.value))} />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">Competitive Intensity</label>
+                    <input type="number" min="1" max="10" className="w-full px-3 py-2 bg-slate-900 border border-white/10 rounded-lg text-white" value={competitiveIntensity} onChange={(e) => setCompetitiveIntensity(parseInt(e.target.value))} />
+                  </div>
                 </div>
               </div>
 

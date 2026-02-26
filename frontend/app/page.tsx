@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import TrendCard from '../components/TrendCard';
 import TrendFilters from '../components/TrendFilters';
+import RiskOpportunityIndex from '../components/RiskOpportunityIndex';
 import { motion } from 'framer-motion';
 
 export default function Home() {
@@ -71,6 +72,9 @@ export default function Home() {
             Curated market intelligence for consulting leaders. Stay ahead of the curve with our weekly analysis of the most impactful AI developments.
           </motion.p>
         </div>
+
+        {/* Risk & Opportunity Index */}
+        <RiskOpportunityIndex trends={trends.filter(t => t.status === 'current')} />
 
         {/* Filters */}
         <TrendFilters 

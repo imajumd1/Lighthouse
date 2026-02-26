@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useApp } from '../../context/AppContext';
-import { Trend } from '../../lib/types';
-import Button from '../../components/ui/Button';
-import ShareModal from '../../components/ShareModal';
+import { useApp } from '../../../context/AppContext';
+import { Trend } from '../../../lib/types';
+import Button from '../../../components/ui/Button';
+import ShareModal from '../../../components/ShareModal';
 
 export default function TrendDetailPage() {
   const { id } = useParams();

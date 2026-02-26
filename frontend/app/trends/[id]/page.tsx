@@ -8,6 +8,7 @@ import { useApp } from '../../../context/AppContext';
 import { Trend } from '../../../lib/types';
 import Button from '../../../components/ui/Button';
 import ShareModal from '../../../components/ShareModal';
+import HeatMap from '../../../components/HeatMap';
 
 export default function TrendDetailPage() {
   const { id } = useParams();
@@ -299,6 +300,13 @@ export default function TrendDetailPage() {
                 </div>
                 <p className="text-xs text-slate-400 italic">{trend.confidenceReasoning}</p>
               </div>
+
+              {/* Heat Map */}
+              {trend.heatMapScores && (
+                <div className="mb-8">
+                  <HeatMap scores={trend.heatMapScores} />
+                </div>
+              )}
 
               <h3 className="text-lg font-semibold text-white mb-6">Actions</h3>
               

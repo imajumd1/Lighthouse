@@ -92,6 +92,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Immediate (0–3 months)',
     confidenceScore: 9,
     confidenceReasoning: 'Validated by major bank deployments (JPMC, Citi) and patent filings',
+    heatMapScores: {
+      capabilityMaturity: 8,
+      capitalBacking: 7,
+      enterpriseAdoption: 6,
+      regulatoryFriction: 9,
+      competitiveIntensity: 8
+    },
     marketValidation: 'Major banks deploying internal LLMs; RegTech startups raising Series B+',
     financialSignal: 'Compliance tech spend projected to grow 15% YoY; High ROI on automation',
     competitiveIntelligence: 'Big 4 firms launching proprietary AI compliance tools; Fintechs embedding AI',
@@ -122,6 +129,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Structural (1–3 years)',
     confidenceScore: 8,
     confidenceReasoning: 'Clinical trials underway for AI-designed drugs; Massive deal flow',
+    heatMapScores: {
+      capabilityMaturity: 7,
+      capitalBacking: 9,
+      enterpriseAdoption: 5,
+      regulatoryFriction: 8,
+      competitiveIntensity: 7
+    },
     marketValidation: '$2B+ in pharma-AI partnerships in Q3; NVIDIA BioNeMo adoption',
     financialSignal: 'High capital efficiency in early-stage biotech; Premium valuations for AI-native platforms',
     competitiveIntelligence: 'Tech giants (NVIDIA, Google) entering bio-pharma; Traditional pharma acquiring AI startups',
@@ -152,6 +166,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Emerging (3–12 months)',
     confidenceScore: 7,
     confidenceReasoning: 'Early pilots successful; Infrastructure costs still high',
+    heatMapScores: {
+      capabilityMaturity: 6,
+      capitalBacking: 8,
+      enterpriseAdoption: 7,
+      regulatoryFriction: 5,
+      competitiveIntensity: 9
+    },
     marketValidation: 'Major e-commerce platforms integrating GenAI; Ad-tech pivot to generative',
     financialSignal: 'Marketing spend shifting to AI tools; CAC reduction focus',
     competitiveIntelligence: 'Amazon/Shopify embedding AI features; Startups disrupting agency model',
@@ -181,6 +202,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Emerging (3–12 months)',
     confidenceScore: 6,
     confidenceReasoning: 'Technology viable but enterprise trust/adoption lagging',
+    heatMapScores: {
+      capabilityMaturity: 5,
+      capitalBacking: 6,
+      enterpriseAdoption: 3,
+      regulatoryFriction: 4,
+      competitiveIntensity: 5
+    },
     marketValidation: 'Logistics giants piloting agentic frameworks; Microsoft/SAP integration',
     financialSignal: 'Supply chain software spend increasing; Focus on working capital optimization',
     competitiveIntelligence: 'Digital-native logistics firms gaining share; Legacy ERPs adding agent layers',
@@ -210,6 +238,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Structural (1–3 years)',
     confidenceScore: 9,
     confidenceReasoning: 'Mandated by grid modernization policies; Proven ROI',
+    heatMapScores: {
+      capabilityMaturity: 9,
+      capitalBacking: 8,
+      enterpriseAdoption: 8,
+      regulatoryFriction: 6,
+      competitiveIntensity: 6
+    },
     marketValidation: 'Utilities globally deploying AI at scale; Gov funding support',
     financialSignal: 'Infrastructure investment supercycle; High cost of failure driving spend',
     competitiveIntelligence: 'Siemens/GE/Schneider doubling down on AI grid tech; Clean-tech startups',
@@ -239,6 +274,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Immediate (0–3 months)',
     confidenceScore: 9,
     confidenceReasoning: 'Widespread adoption in Big Law and corporate legal',
+    heatMapScores: {
+      capabilityMaturity: 9,
+      capitalBacking: 8,
+      enterpriseAdoption: 9,
+      regulatoryFriction: 7,
+      competitiveIntensity: 9
+    },
     marketValidation: 'Harvey AI, Ironclad, etc. seeing massive growth; Law firms licensing tools',
     financialSignal: 'Legal tech investment holding steady; Billable hour model disruption',
     competitiveIntelligence: 'Legal-specific LLMs vs General LLMs; Incumbents acquiring startups',
@@ -268,6 +310,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Emerging (3–12 months)',
     confidenceScore: 8,
     confidenceReasoning: 'Khan Academy/Duolingo success cases; Strong VC backing',
+    heatMapScores: {
+      capabilityMaturity: 7,
+      capitalBacking: 8,
+      enterpriseAdoption: 6,
+      regulatoryFriction: 8,
+      competitiveIntensity: 7
+    },
     marketValidation: 'EdTech unicorns integrating AI tutors; Schools piloting adaptive platforms',
     financialSignal: 'EdTech funding rebounding for AI-focused startups',
     competitiveIntelligence: 'OpenAI partnering with education non-profits; Big Tech entering LMS market',
@@ -297,6 +346,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Structural (1–3 years)',
     confidenceScore: 8,
     confidenceReasoning: 'Standard in aerospace/auto R&D; Software maturity high',
+    heatMapScores: {
+      capabilityMaturity: 8,
+      capitalBacking: 6,
+      enterpriseAdoption: 7,
+      regulatoryFriction: 3,
+      competitiveIntensity: 5
+    },
     marketValidation: 'Autodesk/PTC/Siemens integrating generative features; Airbus/GM adoption',
     financialSignal: 'High value-add in discrete manufacturing; Premium pricing for lightweight parts',
     competitiveIntelligence: 'CAD vendors racing to add AI; Startups focusing on specific verticals',
@@ -326,6 +382,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Immediate (0–3 months)',
     confidenceScore: 9,
     confidenceReasoning: 'Explosion of tools (Runway, Pika, Sora); Hollywood adoption',
+    heatMapScores: {
+      capabilityMaturity: 8,
+      capitalBacking: 10,
+      enterpriseAdoption: 7,
+      regulatoryFriction: 9,
+      competitiveIntensity: 10
+    },
     marketValidation: 'Studios using AI for VFX/dubbing; Marketing agencies adopting en masse',
     financialSignal: 'Media tech valuation reset; Shift from labor to compute spend',
     competitiveIntelligence: 'Adobe vs Startups; Social platforms integrating creation tools',
@@ -355,6 +418,13 @@ export const MOCK_TRENDS: Trend[] = [
     timeHorizon: 'Emerging (3–12 months)',
     confidenceScore: 7,
     confidenceReasoning: 'Global initiatives (Singapore, UK, EU); Procurement cycles slow',
+    heatMapScores: {
+      capabilityMaturity: 6,
+      capitalBacking: 5,
+      enterpriseAdoption: 4,
+      regulatoryFriction: 10,
+      competitiveIntensity: 4
+    },
     marketValidation: 'Gov-specific cloud zones adding AI; Public sector pilots increasing',
     financialSignal: 'GovTech spending resilient to recession; Large contract values',
     competitiveIntelligence: 'System integrators building AI practices; Sovereign AI clouds emerging',

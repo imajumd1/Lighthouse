@@ -27,6 +27,14 @@ export type TrendCategory = 'Capability' | 'Enterprise Adoption' | 'Infrastructu
 export type TimeHorizon = 'Immediate (0–3 months)' | 'Emerging (3–12 months)' | 'Structural (1–3 years)';
 export type TrendMomentum = 'Early Signal' | 'Accelerating' | 'Mainstream Adoption';
 
+export interface HeatMapScores {
+  capabilityMaturity: number; // 1-10
+  capitalBacking: number; // 1-10
+  enterpriseAdoption: number; // 1-10
+  regulatoryFriction: number; // 1-10
+  competitiveIntensity: number; // 1-10
+}
+
 export interface Trend {
   id: string;
   title: string; // Internal title
@@ -47,6 +55,9 @@ export interface Trend {
   confidenceScore: number; // 1-10
   confidenceReasoning: string; // e.g., "Validated by enterprise deployments"
   
+  // Heat Map Scores
+  heatMapScores: HeatMapScores;
+
   // Market Signals
   marketValidation: string; // Adoption, funding, infra availability
   financialSignal: string; // Funding volume, revenue metrics, pricing

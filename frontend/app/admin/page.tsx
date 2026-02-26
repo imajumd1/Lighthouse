@@ -18,6 +18,7 @@ export default function AdminDashboard() {
   const [summary, setSummary] = useState('');
   const [whyTrend, setWhyTrend] = useState('');
   const [leverage, setLeverage] = useState('');
+  const [analysisDetail, setAnalysisDetail] = useState('');
   const [selectedVerticals, setSelectedVerticals] = useState<string[]>([]);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -53,8 +54,10 @@ export default function AdminDashboard() {
       justificationSummary: summary,
       whyTrend,
       howConsultanciesLeverage: leverage,
+      analysisDetail: analysisDetail || 'Detailed analysis pending...',
       affectedVerticals: selectedVerticals,
       sourceUrl: url,
+      additionalSources: [],
       status: 'current',
       imageUrl: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000' // Placeholder
     });
@@ -69,6 +72,7 @@ export default function AdminDashboard() {
     setSummary('');
     setWhyTrend('');
     setLeverage('');
+    setAnalysisDetail('');
     setSelectedVerticals([]);
   };
 
@@ -154,6 +158,16 @@ export default function AdminDashboard() {
                     required
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-400 mb-1.5">Deep Dive Analysis (Details)</label>
+                <textarea
+                  className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-32"
+                  value={analysisDetail}
+                  onChange={(e) => setAnalysisDetail(e.target.value)}
+                  placeholder="Comprehensive analysis of the trend..."
+                />
               </div>
 
               <div>

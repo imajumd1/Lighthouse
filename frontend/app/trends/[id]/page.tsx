@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-// Corrected imports with ../../../ to go up 3 levels from app/trends/[id]
+import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../../../context/AppContext';
 import { Trend } from '../../../lib/types';
 import Button from '../../../components/ui/Button';
@@ -16,6 +15,7 @@ export default function TrendDetailPage() {
   const { trends, verticals, isBookmarked, toggleBookmark, user, isLoading } = useApp();
   const [trend, setTrend] = useState<Trend | null>(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     if (!isLoading) {
@@ -138,9 +138,66 @@ export default function TrendDetailPage() {
                 <span className="w-1 h-6 bg-purple-500 rounded-full" />
                 Why It's a Trend
               </h2>
-              <p className="text-slate-300 leading-relaxed whitespace-pre-line">
+              <p className="text-slate-300 leading-relaxed whitespace-pre-line mb-4">
                 {trend.whyTrend}
               </p>
+              
+              {/* Details Toggle */}
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <button 
+                  onClick={() => setShowDetails(!showDetails)}
+                  className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                >
+                  {showDetails ? 'Hide Details' : 'View Deep Dive Analysis'}
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    strokeWidth={2} 
+                    stroke="currentColor" 
+                    className={`w-4 h-4 transition-transform duration-300 ${showDetails ? 'rotate-180' : ''}`}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                  </svg>
+                </button>
+
+                <AnimatePresence>
+                  {showDetails && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-4 text-slate-300 leading-relaxed">
+                        <p className="mb-4">{trend.analysisDetail}</p>
+                        
+                        {trend.additionalSources && trend.additionalSources.length > 0 && (
+                          <div className="mt-6 bg-slate-800/50 rounded-xl p-4 border border-white/5">
+                            <h4 className="text-sm font-semibold text-white mb-3">Supporting Sources</h4>
+                            <ul className="space-y-2">
+                              {trend.additionalSources.map(source => (
+                                <li key={source.id}>
+                                  <a 
+                                    href={source.url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-colors group"
+                                  >
+                                    <span className="w-1.5 h-1.5 bg-slate-600 rounded-full group-hover:bg-blue-400 transition-colors" />
+                                    <span className="font-medium text-slate-300">{source.title}</span>
+                                    <span className="text-slate-500">- {source.publisher}</span>
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
 
             {/* How Consultancies Leverage */}

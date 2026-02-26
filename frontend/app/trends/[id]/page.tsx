@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+// Corrected imports with ../../../ to go up 3 levels from app/trends/[id]
 import { useApp } from '../../../context/AppContext';
 import { Trend } from '../../../lib/types';
 import Button from '../../../components/ui/Button';

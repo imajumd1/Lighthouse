@@ -13,6 +13,34 @@ interface Message {
   timestamp: Date;
 }
 
+// Mock Knowledge Base for General Strategic Questions
+const KNOWLEDGE_BASE = [
+  {
+    keywords: ['saas', 'software', 'doomed', 'seat-based'],
+    response: "**Executive Perspective:** SaaS isn't doomed, but the *seat-based pricing model* is facing an existential threat. \n\nWe are witnessing a shift toward **Service-as-Software** (outcome-based pricing). \n\n1. **The Shift:** Legacy SaaS apps that merely add AI as a 'copilot' feature will struggle against AI-native apps that replace entire workflows.\n2. **Financial Impact:** Expect margin compression in horizontal SaaS (CRM, HRIS) as AI features become commoditized.\n3. **Opportunity:** Vertical AI agents that own the 'execution layer' will command premium valuations."
+  },
+  {
+    keywords: ['agent', 'autonomous', 'future', 'next big thing'],
+    response: "**Trend Analysis:** Autonomous agents represent the next major platform shift after Mobile and Cloud.\n\n**Projection:** By 2025, we project 40% of enterprise software interactions will be non-human (agent-to-agent).\n\n**Strategic Imperative:** Your immediate priority should be building 'agent-ready' APIs. If your data isn't accessible to agents, your application becomes invisible in the new stack."
+  },
+  {
+    keywords: ['gpu', 'compute', 'nvidia', 'infrastructure', 'cost'],
+    response: "**Infrastructure Outlook:** While GPU scarcity is stabilizing, *inference costs* are becoming the new bottleneck for scaling AI.\n\n**Recommendation:** Do not rely solely on frontier models (like GPT-4) for all tasks. Adopt a **tiered model strategy**:\n- Use Frontier Models for complex reasoning.\n- Use SLMs (Small Language Models) for routine, high-volume tasks to protect margins."
+  },
+  {
+    keywords: ['regulation', 'law', 'eu ai act', 'compliance'],
+    response: "**Regulatory Landscape:** The era of self-regulation is over. The EU AI Act is setting the global standard (the 'Brussels Effect').\n\n**Risk:** The biggest exposure for enterprises isn't fines, but **reputational damage** and **forced model deletion** if data lineage cannot be proven. \n\n**Action:** Implement a 'Model Bill of Materials' (MBOM) for every AI deployment immediately."
+  },
+  {
+    keywords: ['job', 'workforce', 'replace', 'hiring'],
+    response: "**Workforce Transformation:** AI is not replacing jobs; it is replacing *tasks*. \n\n**Impact:** We are seeing a 'hollowing out' of mid-level cognitive tasks (data entry, basic analysis, tier-1 support). \n\n**Strategy:** Reallocate headcount budget from execution roles to **oversight and orchestration** roles. The most valuable employee skill in 2025 will be 'AI Literacy' and 'Prompt Engineering'."
+  },
+  {
+    keywords: ['build', 'buy', 'vendor'],
+    response: "**Build vs. Buy Strategy:**\n\n- **BUY** for commodity capabilities (email drafting, meeting summaries, basic code gen). The vendor market is moving too fast to compete.\n- **BUILD** (or fine-tune) for core differentiation where you have proprietary data that no competitor can access.\n\n**Warning:** Avoid building 'wrappers' around public APIs that offer no defensible moat."
+  }
+];
+
 const AskLighthouse = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -20,7 +48,7 @@ const AskLighthouse = () => {
     {
       id: 'welcome',
       role: 'assistant',
-      content: 'Hello. I am your Lighthouse AI analyst. Ask me about market trends, risk exposure, or strategic opportunities.',
+      content: 'Hello. I am your Lighthouse AI analyst. I can help you synthesize market trends, assess strategic risks, or answer questions like "Are SaaS companies doomed?"',
       timestamp: new Date(),
     },
   ]);
@@ -37,33 +65,39 @@ const AskLighthouse = () => {
   const generateResponse = (query: string) => {
     const lowerQuery = query.toLowerCase();
     
-    // Check if we are on a specific trend page
+    // 1. Check Context: Are we on a specific trend page?
     const trendIdMatch = pathname?.match(/\/trends\/(.+)/);
     const currentTrendId = trendIdMatch ? trendIdMatch[1] : null;
     const currentTrend = currentTrendId ? trends.find(t => t.id === currentTrendId) : null;
 
     if (currentTrend) {
-      if (lowerQuery.includes('cost') || lowerQuery.includes('price') || lowerQuery.includes('budget')) {
-        return `**Financial Impact Analysis for ${currentTrend.title}:**\n\nBased on current market data, implementing this technology typically requires an upfront CapEx increase of 10-15%, but yields a 30-40% reduction in OpEx within 18 months. The primary cost drivers are infrastructure setup and data cleaning.`;
+      if (lowerQuery.includes('cost') || lowerQuery.includes('price') || lowerQuery.includes('budget') || lowerQuery.includes('financial')) {
+        return `**Financial Impact Analysis for ${currentTrend.title}:**\n\n${currentTrend.financialSignal}\n\n**Strategic Impact:**\n${currentTrend.strategicImpact}`;
       }
-      if (lowerQuery.includes('risk') || lowerQuery.includes('danger') || lowerQuery.includes('compliance')) {
-        return `**Risk Assessment for ${currentTrend.title}:**\n\nThe primary risk vector is ${currentTrend.riskGovernance}. We recommend establishing a "human-in-the-loop" governance framework immediately. Regulatory friction is currently rated at ${currentTrend.heatMapScores?.regulatoryFriction}/10, indicating significant compliance overhead.`;
+      if (lowerQuery.includes('risk') || lowerQuery.includes('danger') || lowerQuery.includes('compliance') || lowerQuery.includes('governance')) {
+        return `**Risk Assessment for ${currentTrend.title}:**\n\n${currentTrend.riskGovernance}\n\n**Regulatory Friction Score:** ${currentTrend.heatMapScores?.regulatoryFriction}/10`;
       }
-      if (lowerQuery.includes('competitor') || lowerQuery.includes('who') || lowerQuery.includes('market')) {
-        return `**Competitive Landscape:**\n\n${currentTrend.competitiveIntelligence}. The market is currently in the "${currentTrend.trendMomentum}" phase. Early movers are establishing moats through proprietary data access.`;
+      if (lowerQuery.includes('competitor') || lowerQuery.includes('who') || lowerQuery.includes('market') || lowerQuery.includes('player')) {
+        return `**Competitive Landscape:**\n\n${currentTrend.competitiveIntelligence}\n\n**Market Validation:**\n${currentTrend.marketValidation}`;
       }
-      return `**Strategic Analysis:**\n\n${currentTrend.headline}. This trend is currently in the "${currentTrend.timeHorizon}" horizon. \n\n**Strategic Impact:**\n${currentTrend.strategicImpact}\n\n**Recommendation:**\n${currentTrend.actionGuidance}`;
+      // Default trend context response
+      return `**Strategic Analysis of ${currentTrend.headline}:**\n\nThis trend is currently in the **${currentTrend.timeHorizon}** horizon with a confidence score of **${currentTrend.confidenceScore}/10**.\n\n**Why it matters:** ${currentTrend.whyTrend}\n\n**Recommendation:** ${currentTrend.actionGuidance}`;
     }
 
-    // General responses
+    // 2. Check Knowledge Base for General Strategic Questions
+    for (const entry of KNOWLEDGE_BASE) {
+      if (entry.keywords.some(keyword => lowerQuery.includes(keyword))) {
+        return entry.response;
+      }
+    }
+
+    // 3. General Trend/Market Queries
     if (lowerQuery.includes('trend') || lowerQuery.includes('hot') || lowerQuery.includes('new')) {
       return "Based on our real-time index, **Generative AI in Regulatory Compliance** and **AI in Media Content Creation** are showing the highest momentum this week. Both are rated 'Accelerating' with strong capital backing.";
     }
-    if (lowerQuery.includes('risk') || lowerQuery.includes('safe')) {
-      return "Our aggregate Risk & Opportunity Index shows a rising trend in **Regulatory Friction** (avg 6.8/10) across all sectors. We advise conducting a comprehensive AI governance audit before scaling any pilot programs.";
-    }
     
-    return "That's a strategic question. Based on our data, organizations prioritizing **vertical-specific AI agents** are seeing 3x faster ROI than those deploying general-purpose LLMs. Would you like me to break down the impact on your specific industry vertical?";
+    // 4. Fallback for unknown queries
+    return "That is a nuanced strategic question. While I don't have a specific pre-trained answer for that exact phrase, I can tell you that **data sovereignty** and **model governance** are the two most critical themes across all our current intelligence. \n\nWould you like me to analyze the impact of these themes on a specific vertical like Healthcare or Finance?";
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -81,7 +115,9 @@ const AskLighthouse = () => {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate AI processing time
+    // Simulate AI processing time (randomized for realism)
+    const delay = Math.floor(Math.random() * 1000) + 1000; // 1-2 seconds
+    
     setTimeout(() => {
       const responseText = generateResponse(userMsg.content);
       const aiMsg: Message = {
@@ -92,7 +128,7 @@ const AskLighthouse = () => {
       };
       setMessages(prev => [...prev, aiMsg]);
       setIsTyping(false);
-    }, 1500);
+    }, delay);
   };
 
   return (
@@ -194,22 +230,22 @@ const AskLighthouse = () => {
               </form>
               <div className="mt-2 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
                 <button 
-                  onClick={() => setInputValue("What are the key risks?")}
+                  onClick={() => setInputValue("Are SaaS companies doomed?")}
                   className="whitespace-nowrap px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full text-xs text-slate-400 hover:text-white transition-colors border border-white/5"
                 >
-                  Key Risks
+                  SaaS Future
                 </button>
                 <button 
-                  onClick={() => setInputValue("How does this affect cost?")}
+                  onClick={() => setInputValue("What is the risk of AI agents?")}
                   className="whitespace-nowrap px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full text-xs text-slate-400 hover:text-white transition-colors border border-white/5"
                 >
-                  Cost Impact
+                  Agent Risk
                 </button>
                 <button 
-                  onClick={() => setInputValue("Who are the competitors?")}
+                  onClick={() => setInputValue("Build vs Buy AI?")}
                   className="whitespace-nowrap px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full text-xs text-slate-400 hover:text-white transition-colors border border-white/5"
                 >
-                  Competitors
+                  Build vs Buy
                 </button>
               </div>
             </div>

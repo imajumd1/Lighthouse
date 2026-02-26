@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useApp } from '../../context/AppContext';
-import { Trend } from '../../lib/types';
+import { Trend, TrendCategory, TimeHorizon, TrendMomentum } from '../../lib/types';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Link from 'next/link';
@@ -17,10 +17,22 @@ export default function AdminDashboard() {
   // Form State
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
+  const [headline, setHeadline] = useState('');
+  const [trendCategory, setTrendCategory] = useState<TrendCategory>('Capability');
   const [summary, setSummary] = useState('');
   const [whyTrend, setWhyTrend] = useState('');
   const [leverage, setLeverage] = useState('');
   const [analysisDetail, setAnalysisDetail] = useState('');
+  const [strategicImpact, setStrategicImpact] = useState('');
+  const [timeHorizon, setTimeHorizon] = useState<TimeHorizon>('Emerging (3–12 months)');
+  const [confidenceScore, setConfidenceScore] = useState(7);
+  const [confidenceReasoning, setConfidenceReasoning] = useState('');
+  const [marketValidation, setMarketValidation] = useState('');
+  const [financialSignal, setFinancialSignal] = useState('');
+  const [competitiveIntelligence, setCompetitiveIntelligence] = useState('');
+  const [riskGovernance, setRiskGovernance] = useState('');
+  const [trendMomentum, setTrendMomentum] = useState<TrendMomentum>('Early Signal');
+  const [actionGuidance, setActionGuidance] = useState('');
   const [selectedVerticals, setSelectedVerticals] = useState<string[]>([]);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -43,7 +55,8 @@ export default function AdminDashboard() {
     // Simulate fetching metadata
     setTimeout(() => {
       setTitle('Simulated Fetched Title from URL');
-      setSummary('This is a simulated summary fetched from the provided URL. In a real app, this would come from an Open Graph scraper.');
+      setHeadline('Simulated Executive Headline (10 words max)');
+      setSummary('• Key point 1\n• Key point 2\n• Key point 3');
       setIsFetching(false);
     }, 1500);
   };
@@ -53,10 +66,22 @@ export default function AdminDashboard() {
     
     addTrend({
       title,
+      headline,
+      trendCategory,
       justificationSummary: summary,
       whyTrend,
       howConsultanciesLeverage: leverage,
       analysisDetail: analysisDetail || 'Detailed analysis pending...',
+      strategicImpact,
+      timeHorizon,
+      confidenceScore,
+      confidenceReasoning,
+      marketValidation,
+      financialSignal,
+      competitiveIntelligence,
+      riskGovernance,
+      trendMomentum,
+      actionGuidance,
       affectedVerticals: selectedVerticals,
       sourceUrl: url,
       additionalSources: [],
@@ -71,10 +96,22 @@ export default function AdminDashboard() {
   const resetForm = () => {
     setUrl('');
     setTitle('');
+    setHeadline('');
+    setTrendCategory('Capability');
     setSummary('');
     setWhyTrend('');
     setLeverage('');
     setAnalysisDetail('');
+    setStrategicImpact('');
+    setTimeHorizon('Emerging (3–12 months)');
+    setConfidenceScore(7);
+    setConfidenceReasoning('');
+    setMarketValidation('');
+    setFinancialSignal('');
+    setCompetitiveIntelligence('');
+    setRiskGovernance('');
+    setTrendMomentum('Early Signal');
+    setActionGuidance('');
     setSelectedVerticals([]);
   };
 
@@ -139,33 +176,87 @@ export default function AdminDashboard() {
           >
             <h2 className="text-xl font-bold text-white mb-6">Add New Trend</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="flex gap-4 items-end">
+              {/* Core Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Input
                   label="Source URL"
                   placeholder="https://example.com/article"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                 />
-                <Button 
-                  type="button" 
-                  variant="secondary" 
-                  onClick={handleFetchMetadata}
-                  isLoading={isFetching}
-                  className="mb-[2px]"
-                >
-                  Fetch Metadata
-                </Button>
+                <div className="flex items-end">
+                  <Button 
+                    type="button" 
+                    variant="secondary" 
+                    onClick={handleFetchMetadata}
+                    isLoading={isFetching}
+                    fullWidth
+                  >
+                    Fetch Metadata
+                  </Button>
+                </div>
               </div>
 
-              <Input
-                label="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Input
+                  label="Internal Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+                <Input
+                  label="Executive Headline (10 words max)"
+                  value={headline}
+                  onChange={(e) => setHeadline(e.target.value)}
+                  required
+                />
+              </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Trend Category</label>
+                  <select 
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    value={trendCategory}
+                    onChange={(e) => setTrendCategory(e.target.value as TrendCategory)}
+                  >
+                    <option>Capability</option>
+                    <option>Enterprise Adoption</option>
+                    <option>Infrastructure</option>
+                    <option>Regulation</option>
+                    <option>Capital Markets</option>
+                    <option>Competitive Move</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Time Horizon</label>
+                  <select 
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    value={timeHorizon}
+                    onChange={(e) => setTimeHorizon(e.target.value as TimeHorizon)}
+                  >
+                    <option>Immediate (0–3 months)</option>
+                    <option>Emerging (3–12 months)</option>
+                    <option>Structural (1–3 years)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Trend Momentum</label>
+                  <select 
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    value={trendMomentum}
+                    onChange={(e) => setTrendMomentum(e.target.value as TrendMomentum)}
+                  >
+                    <option>Early Signal</option>
+                    <option>Accelerating</option>
+                    <option>Mainstream Adoption</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Analysis */}
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-1.5">Justification Summary</label>
+                <label className="block text-sm font-medium text-slate-400 mb-1.5">3-Bullet Executive Summary</label>
                 <textarea
                   className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-24"
                   value={summary}
@@ -174,14 +265,95 @@ export default function AdminDashboard() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-slate-400 mb-1.5">Strategic Impact (Cost, Revenue, Risk)</label>
+                <textarea
+                  className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-24"
+                  value={strategicImpact}
+                  onChange={(e) => setStrategicImpact(e.target.value)}
+                  required
+                />
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Why It's a Trend</label>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Market Validation</label>
+                  <textarea
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-24"
+                    value={marketValidation}
+                    onChange={(e) => setMarketValidation(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Financial Signal</label>
+                  <textarea
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-24"
+                    value={financialSignal}
+                    onChange={(e) => setFinancialSignal(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Competitive Intelligence</label>
+                  <textarea
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-24"
+                    value={competitiveIntelligence}
+                    onChange={(e) => setCompetitiveIntelligence(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Risk & Governance</label>
+                  <textarea
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-24"
+                    value={riskGovernance}
+                    onChange={(e) => setRiskGovernance(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-400 mb-1.5">Action Guidance (What To Do Now)</label>
+                <textarea
+                  className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-24"
+                  value={actionGuidance}
+                  onChange={(e) => setActionGuidance(e.target.value)}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Confidence Score (1-10)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="10"
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    value={confidenceScore}
+                    onChange={(e) => setConfidenceScore(parseInt(e.target.value))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Confidence Reasoning</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    value={confidenceReasoning}
+                    onChange={(e) => setConfidenceReasoning(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Deep Dive Fields (Hidden by default in UI but available) */}
+              <div className="space-y-6 pt-6 border-t border-white/10">
+                <h3 className="text-lg font-semibold text-white">Deep Dive Content</h3>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Context & Analysis (Why Trend)</label>
                   <textarea
                     className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-32"
                     value={whyTrend}
                     onChange={(e) => setWhyTrend(e.target.value)}
-                    required
                   />
                 </div>
                 <div>
@@ -190,19 +362,16 @@ export default function AdminDashboard() {
                     className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-32"
                     value={leverage}
                     onChange={(e) => setLeverage(e.target.value)}
-                    required
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-400 mb-1.5">Deep Dive Analysis (Details)</label>
-                <textarea
-                  className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-32"
-                  value={analysisDetail}
-                  onChange={(e) => setAnalysisDetail(e.target.value)}
-                  placeholder="Comprehensive analysis of the trend..."
-                />
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-1.5">Deep Dive Analysis</label>
+                  <textarea
+                    className="w-full px-4 py-2.5 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 h-32"
+                    value={analysisDetail}
+                    onChange={(e) => setAnalysisDetail(e.target.value)}
+                  />
+                </div>
               </div>
 
               <div>
@@ -249,9 +418,9 @@ export default function AdminDashboard() {
                     }`}>
                       {trend.status.toUpperCase()}
                     </span>
-                    <h4 className="font-medium text-white">{trend.title}</h4>
+                    <h4 className="font-medium text-white">{trend.headline}</h4>
                   </div>
-                  <p className="text-sm text-slate-400 line-clamp-1">{trend.justificationSummary}</p>
+                  <p className="text-sm text-slate-400 line-clamp-1">{trend.title}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <Link href={`/trends/${trend.id}`}>

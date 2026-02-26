@@ -41,6 +41,15 @@ export default function TrendDetailPage() {
   const bookmarked = isBookmarked(trend.id);
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
 
+  const getMomentumColor = (momentum: string) => {
+    switch (momentum) {
+      case 'Early Signal': return 'text-red-400 bg-red-400/10 border-red-400/20';
+      case 'Accelerating': return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
+      case 'Mainstream Adoption': return 'text-green-400 bg-green-400/10 border-green-400/20';
+      default: return 'text-slate-400 bg-slate-400/10 border-slate-400/20';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 pb-20">
       <ShareModal 
@@ -79,24 +88,22 @@ export default function TrendDetailPage() {
               Back to Feed
             </Link>
 
-            <div className="flex flex-wrap gap-2 mb-4">
-              {trend.affectedVerticals.map(vId => {
-                const vertical = getVertical(vId);
-                if (!vertical) return null;
-                return (
-                  <span 
-                    key={vId} 
-                    className={`text-xs px-3 py-1 rounded-full font-medium bg-blue-500/20 text-blue-200 border border-blue-500/30 backdrop-blur-sm`}
-                  >
-                    {vertical.name}
-                  </span>
-                );
-              })}
+            <div className="flex flex-wrap gap-3 mb-4">
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getMomentumColor(trend.trendMomentum)}`}>
+                {trend.trendMomentum}
+              </span>
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                {trend.trendCategory}
+              </span>
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                {trend.timeHorizon}
+              </span>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
-              {trend.title}
+              {trend.headline}
             </h1>
+            <p className="text-xl text-slate-300 mb-6 font-light">{trend.title}</p>
 
             <div className="flex items-center gap-6 text-sm text-slate-400">
               <span>{new Date(trend.dateAdded).toLocaleDateString()}</span>
@@ -111,7 +118,8 @@ export default function TrendDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Analysis */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Justification Summary */}
+            
+            {/* Executive Summary */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -122,12 +130,12 @@ export default function TrendDetailPage() {
                 <span className="w-1 h-6 bg-blue-500 rounded-full" />
                 Executive Summary
               </h2>
-              <p className="text-lg text-slate-300 leading-relaxed">
+              <div className="text-lg text-slate-300 leading-relaxed whitespace-pre-line">
                 {trend.justificationSummary}
-              </p>
+              </div>
             </motion.div>
 
-            {/* Why It's a Trend */}
+            {/* Strategic Impact */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -136,85 +144,137 @@ export default function TrendDetailPage() {
             >
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
                 <span className="w-1 h-6 bg-purple-500 rounded-full" />
-                Why It's a Trend
+                Strategic Impact
               </h2>
-              <p className="text-slate-300 leading-relaxed whitespace-pre-line mb-4">
-                {trend.whyTrend}
-              </p>
-              
-              {/* Details Toggle */}
-              <div className="mt-6 pt-6 border-t border-white/10">
-                <button 
-                  onClick={() => setShowDetails(!showDetails)}
-                  className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium transition-colors"
-                >
-                  {showDetails ? 'Hide Details' : 'View Deep Dive Analysis'}
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    strokeWidth={2} 
-                    stroke="currentColor" 
-                    className={`w-4 h-4 transition-transform duration-300 ${showDetails ? 'rotate-180' : ''}`}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
-                </button>
-
-                <AnimatePresence>
-                  {showDetails && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pt-4 text-slate-300 leading-relaxed">
-                        <p className="mb-4">{trend.analysisDetail}</p>
-                        
-                        {trend.additionalSources && trend.additionalSources.length > 0 && (
-                          <div className="mt-6 bg-slate-800/50 rounded-xl p-4 border border-white/5">
-                            <h4 className="text-sm font-semibold text-white mb-3">Supporting Sources</h4>
-                            <ul className="space-y-2">
-                              {trend.additionalSources.map(source => (
-                                <li key={source.id}>
-                                  <a 
-                                    href={source.url} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-colors group"
-                                  >
-                                    <span className="w-1.5 h-1.5 bg-slate-600 rounded-full group-hover:bg-blue-400 transition-colors" />
-                                    <span className="font-medium text-slate-300">{source.title}</span>
-                                    <span className="text-slate-500">- {source.publisher}</span>
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              <div className="text-slate-300 leading-relaxed whitespace-pre-line font-medium">
+                {trend.strategicImpact}
               </div>
             </motion.div>
 
-            {/* How Consultancies Leverage */}
+            {/* Market Signals Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl"
+              >
+                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Market Validation</h3>
+                <p className="text-slate-200 text-sm">{trend.marketValidation}</p>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl"
+              >
+                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Financial Signal</h3>
+                <p className="text-slate-200 text-sm">{trend.financialSignal}</p>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl"
+              >
+                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Competitive Intel</h3>
+                <p className="text-slate-200 text-sm">{trend.competitiveIntelligence}</p>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl"
+              >
+                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Risk & Governance</h3>
+                <p className="text-red-200 text-sm">{trend.riskGovernance}</p>
+              </motion.div>
+            </div>
+
+            {/* Action Guidance */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-xl"
+              transition={{ delay: 0.6 }}
+              className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-500/30 rounded-2xl p-8 shadow-xl"
             >
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                <span className="w-1 h-6 bg-pink-500 rounded-full" />
-                Consulting Leverage
+                <span className="w-1 h-6 bg-green-500 rounded-full" />
+                What To Do Now
               </h2>
-              <p className="text-slate-300 leading-relaxed whitespace-pre-line">
-                {trend.howConsultanciesLeverage}
+              <p className="text-slate-200 font-medium leading-relaxed">
+                {trend.actionGuidance}
               </p>
             </motion.div>
+
+            {/* Deep Dive Toggle */}
+            <div className="pt-6 border-t border-white/10">
+              <button 
+                onClick={() => setShowDetails(!showDetails)}
+                className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium transition-colors"
+              >
+                {showDetails ? 'Hide Deep Dive Analysis' : 'View Deep Dive Analysis'}
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  strokeWidth={2} 
+                  stroke="currentColor" 
+                  className={`w-4 h-4 transition-transform duration-300 ${showDetails ? 'rotate-180' : ''}`}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+
+              <AnimatePresence>
+                {showDetails && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pt-6 space-y-6">
+                      <div className="bg-slate-900/50 rounded-xl p-6 border border-white/5">
+                        <h3 className="text-lg font-semibold text-white mb-3">Context & Analysis</h3>
+                        <p className="text-slate-300 leading-relaxed mb-4">{trend.whyTrend}</p>
+                        <p className="text-slate-300 leading-relaxed">{trend.analysisDetail}</p>
+                      </div>
+
+                      <div className="bg-slate-900/50 rounded-xl p-6 border border-white/5">
+                        <h3 className="text-lg font-semibold text-white mb-3">Consulting Leverage</h3>
+                        <p className="text-slate-300 leading-relaxed">{trend.howConsultanciesLeverage}</p>
+                      </div>
+                      
+                      {trend.additionalSources && trend.additionalSources.length > 0 && (
+                        <div className="bg-slate-800/50 rounded-xl p-6 border border-white/5">
+                          <h4 className="text-sm font-semibold text-white mb-3">Supporting Sources</h4>
+                          <ul className="space-y-2">
+                            {trend.additionalSources.map(source => (
+                              <li key={source.id}>
+                                <a 
+                                  href={source.url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-colors group"
+                                >
+                                  <span className="w-1.5 h-1.5 bg-slate-600 rounded-full group-hover:bg-blue-400 transition-colors" />
+                                  <span className="font-medium text-slate-300">{source.title}</span>
+                                  <span className="text-slate-500">- {source.publisher}</span>
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* Sidebar Actions */}
@@ -225,6 +285,21 @@ export default function TrendDetailPage() {
               transition={{ delay: 0.5 }}
               className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sticky top-24"
             >
+              {/* Confidence Score */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Confidence Score</h3>
+                  <span className="text-2xl font-bold text-white">{trend.confidenceScore}/10</span>
+                </div>
+                <div className="w-full bg-slate-800 rounded-full h-2 mb-3">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full" 
+                    style={{ width: `${trend.confidenceScore * 10}%` }}
+                  />
+                </div>
+                <p className="text-xs text-slate-400 italic">{trend.confidenceReasoning}</p>
+              </div>
+
               <h3 className="text-lg font-semibold text-white mb-6">Actions</h3>
               
               <div className="space-y-4">

@@ -1,2 +1,25 @@
+# Node
 node_modules
 package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv
+*.log
+
+# IDEs
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Next.js
+.next/

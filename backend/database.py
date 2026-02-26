@@ -1,9 +1,10 @@
+from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from config import settings
 
 # Global database client and database instances
-client: AsyncIOMotorClient | None = None
-db: AsyncIOMotorDatabase | None = None
+client: Optional[AsyncIOMotorClient] = None
+db: Optional[AsyncIOMotorDatabase] = None
 
 
 async def connect_to_mongodb():

@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 
 from config import settings
 from database import connect_to_mongodb, close_mongodb_connection, get_database
+from routers import auth
 
 
 @asynccontextmanager
@@ -32,6 +33,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(auth.router)
 
 
 @app.get("/healthz")

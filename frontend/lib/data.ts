@@ -114,7 +114,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-10-15T10:00:00Z',
     author: 'Financial Times',
-    imageUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 't2',
@@ -151,7 +151,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-10-18T14:30:00Z',
     author: 'NVIDIA AI Blog',
-    imageUrl: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 't3',
@@ -187,7 +187,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-10-20T09:15:00Z',
     author: 'BCG Insights',
-    imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 't4',
@@ -223,7 +223,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-10-22T11:45:00Z',
     author: 'Gartner Research',
-    imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 't5',
@@ -259,7 +259,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-10-25T16:20:00Z',
     author: 'AWS Machine Learning Blog',
-    imageUrl: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 't6',
@@ -295,7 +295,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-10-28T08:00:00Z',
     author: 'Harvard Business Review',
-    imageUrl: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1436450412740-6b988f486c6b?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 't7',
@@ -331,7 +331,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-10-30T13:10:00Z',
     author: 'Stanford HAI',
-    imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 't8',
@@ -367,7 +367,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-11-02T10:30:00Z',
     author: 'MIT Technology Review',
-    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 't9',
@@ -403,7 +403,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-11-05T15:45:00Z',
     author: 'a16z AI Blog',
-    imageUrl: 'https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 't10',
@@ -439,7 +439,7 @@ export const MOCK_TRENDS: Trend[] = [
     status: 'current',
     dateAdded: '2023-11-08T09:00:00Z',
     author: 'Brookings Institution',
-    imageUrl: 'https://images.unsplash.com/photo-1555848962-6e79363ec58f?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&q=80&w=1000',
   },
 ];
 

@@ -4,6 +4,11 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User, Trend, Bookmark, Vertical } from '../lib/types';
 import { MOCK_USERS, MOCK_TRENDS, VERTICALS } from '../lib/data';
 
+// Get API base URL from environment or default to localhost
+const API_BASE_URL = typeof window !== 'undefined'
+  ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:8000'
+  : 'http://localhost:8000';
+
 interface AppContextType {
   user: User | null;
   trends: Trend[];
@@ -33,7 +38,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const fetchTrends = async () => {
     try {
       console.log('[AppContext] Fetching trends from scraping API...');
-      const response = await fetch('http://localhost:8000/api/trends/discover?top_n=10&lookback_days=7', {
+      console.log('[AppContext] API URL:', `${API_BASE_URL}/api/trends/discover`);
+      const response = await fetch(`${API_BASE_URL}/api/trends/discover?top_n=10&lookback_days=7`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

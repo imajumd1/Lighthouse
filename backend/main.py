@@ -77,3 +77,17 @@ async def root():
         "version": "1.0.0",
         "docs": "/docs"
     }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    
+    # Get port from settings, default to 8002
+    port = getattr(settings, 'port', 8002)
+    
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=port,
+        reload=False  # Set to False for production
+    )

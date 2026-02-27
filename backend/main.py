@@ -81,9 +81,10 @@ async def root():
 
 if __name__ == "__main__":
     import uvicorn
+    import os
     
-    # Get port from settings, default to 8002
-    port = getattr(settings, 'port', 8002)
+    # Get port from environment variable (Render uses $PORT) or settings, default to 8002
+    port = int(os.getenv('PORT', getattr(settings, 'port', 8002)))
     
     uvicorn.run(
         "main:app",

@@ -1,4 +1,4 @@
-# Render Deployment Fix
+# Render Deployment Fix - UPDATED SOLUTION
 
 ## Problem Diagnosis
 
@@ -7,11 +7,13 @@ The build was failing with:
 ```
 error: failed to create directory `/usr/local/cargo/registry/cache/index.crates.io-1949cf8c6b5b557f`
 Caused by: Read-only file system (os error 30)
+💥 maturin failed
+Caused by: Cargo metadata failed
 ```
 
 ### Root Cause Analysis
 
-**Primary Issue: Python 3.14 Incompatibility**
+**Primary Issue: Python 3.14 + Pydantic Version Incompatibility**
 
 The Render environment was using Python 3.14, which is too new. The `pydantic-core` package (required by `pydantic==2.9.2`) doesn't have pre-compiled binary wheels for Python 3.14 yet.
 
@@ -28,20 +30,71 @@ The Render environment was using Python 3.14, which is too new. The `pydantic-co
 - Missing or incomplete Rust toolchain configuration
 - No fallback mechanism when binary wheels are unavailable
 
-## Solution Implemented
+## Solution Implemented (3-Part Fix)
 
-### 1. Created `runtime.txt`
+### 1. Downgraded Pydantic Version
 
-**File:** `backend/runtime.txt`
+**Changed in `backend/requirements.txt`:**
+```diff
+- pydantic==2.9.2
+- pydantic-settings==2.6.0
++ pydantic==2.8.2
++ pydantic-settings==2.4.0
+```
+
+**Why This Helps:**
+- Pydantic 2.8.2 has better wheel availability across Python versions
+- More stable and tested with Python 3.11
+- Reduces dependency on bleeding-edge Rust compilation
+
+### 2. Created Multiple Python Version Files
+
+**File 1: `backend/runtime.txt`**
 ```
 python-3.11.9
 ```
 
+**File 2: `backend/.python-version`**
+```
+3.11.9
+```
+
+**Why Both Files:**
+- `runtime.txt` is Render's official way to specify Python version
+- `.python-version` is a fallback used by pyenv and some build systems
+- Having both ensures maximum compatibility
+
+### 3. Created `render.yaml` Configuration
+
+**File: `backend/render.yaml`**
+```yaml
+services:
+  - type: web
+    name: lighthouse-backend
+    env: python
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: MONGODB_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: APP_ENV
+        value: production
+```
+
 **Why This Fixes It:**
-- Python 3.11 is a stable, well-supported version
-- All dependencies in `requirements.txt` have pre-built binary wheels for Python 3.11
-- No source compilation required → no Rust/Cargo needed → no filesystem write issues
-- Faster build times (binary wheels install in seconds vs. minutes of compilation)
+- Explicitly sets `PYTHON_VERSION=3.11.9` as an environment variable
+- Ensures pip is upgraded before installing dependencies
+- Uses `$PORT` environment variable (Render requirement)
+- Infrastructure-as-code approach prevents configuration drift
 
 ### 2. Verification Steps
 

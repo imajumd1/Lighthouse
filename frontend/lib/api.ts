@@ -4,8 +4,8 @@
  */
 
 const API_BASE_URL = typeof window !== 'undefined'
-  ? (window as any).NEXT_PUBLIC_API_URL || 'https://lighthouse-backend-fc77.onrender.com/api'
-  : 'https://lighthouse-backend-fc77.onrender.com/api';
+  ? (window as any).NEXT_PUBLIC_API_URL || 'https://lighthouse-backend-fc77.onrender.com'
+  : 'https://lighthouse-backend-fc77.onrender.com';
 
 interface ApiError {
   error: string;

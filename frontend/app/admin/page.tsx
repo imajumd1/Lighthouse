@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { APPROVED_SOURCES } from '../../lib/data';
 
 export default function AdminDashboard() {
-  const { user, trends, addTrend, archiveTrend, verticals } = useApp();
+  const { user, trends, addTrend, archiveTrend, verticals, refreshTrends } = useApp();
   const [isAdding, setIsAdding] = useState(false);
   const [showSources, setShowSources] = useState(false);
   
@@ -140,6 +140,19 @@ export default function AdminDashboard() {
     );
   };
 
+  const handleRefreshTrends = async () => {
+    setIsFetching(true);
+    try {
+      await refreshTrends();
+      alert('✅ Trends refreshed successfully from curated sources!');
+    } catch (error) {
+      alert('❌ Error refreshing trends. Check console for details.');
+      console.error('Error refreshing trends:', error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -149,6 +162,13 @@ export default function AdminDashboard() {
             <p className="text-slate-400">Manage trends and content curation.</p>
           </div>
           <div className="flex gap-4">
+            <Button
+              variant="secondary"
+              onClick={handleRefreshTrends}
+              disabled={isFetching}
+            >
+              {isFetching ? '🔄 Scraping...' : '🔄 Refresh Trends from Sources'}
+            </Button>
             <Button variant="secondary" onClick={() => setShowSources(!showSources)}>
               {showSources ? 'Hide Sources' : 'View Approved Sources'}
             </Button>

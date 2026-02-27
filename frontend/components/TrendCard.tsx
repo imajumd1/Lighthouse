@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Trend, Vertical } from '../lib/types';
 import { useApp } from '../context/AppContext';
@@ -13,12 +14,25 @@ interface TrendCardProps {
 }
 
 const TrendCard = ({ trend, index }: TrendCardProps) => {
+  const router = useRouter();
   const { verticals, isBookmarked, toggleBookmark, user } = useApp();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   
   const getVertical = (id: string) => verticals.find(v => v.id === id);
   const bookmarked = isBookmarked(trend.id);
   const trendUrl = typeof window !== 'undefined' ? `${window.location.origin}/trends/${trend.id}` : '';
+
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!user) {
+      // Prompt user to log in
+      if (confirm('Please sign in to bookmark trends. Would you like to go to the login page?')) {
+        router.push('/login');
+      }
+      return;
+    }
+    toggleBookmark(trend.id);
+  };
 
   return (
     <>
@@ -80,24 +94,19 @@ const TrendCard = ({ trend, index }: TrendCardProps) => {
                     </svg>
                   </button>
 
-                  {user && (
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleBookmark(trend.id);
-                      }}
-                      className={`p-2 rounded-full transition-colors ${
-                        bookmarked 
-                          ? 'text-yellow-400 bg-yellow-400/10' 
-                          : 'text-slate-500 hover:text-white hover:bg-white/10'
-                      }`}
-                      title={bookmarked ? "Remove from Saved" : "Save Trend"}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill={bookmarked ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
-                      </svg>
-                    </button>
-                  )}
+                  <button
+                    onClick={handleBookmarkClick}
+                    className={`p-2 rounded-full transition-colors ${
+                      bookmarked
+                        ? 'text-yellow-400 bg-yellow-400/10'
+                        : 'text-slate-500 hover:text-white hover:bg-white/10'
+                    }`}
+                    title={bookmarked ? "Remove from Saved" : user ? "Save Trend" : "Sign in to Save Trend"}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill={bookmarked ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                    </svg>
+                  </button>
                 </div>
               </div>
 
@@ -126,10 +135,6 @@ const TrendCard = ({ trend, index }: TrendCardProps) => {
               )}
               
               <div className="flex-grow" />
-              
-              <span className="text-xs text-slate-500">
-                {new Date(trend.dateAdded).toLocaleDateString()}
-              </span>
             </div>
           </div>
         </div>

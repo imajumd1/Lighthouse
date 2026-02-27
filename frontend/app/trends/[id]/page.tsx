@@ -42,6 +42,17 @@ export default function TrendDetailPage() {
   const bookmarked = isBookmarked(trend.id);
   const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
 
+  const handleBookmarkClick = () => {
+    if (!user) {
+      // Prompt user to log in
+      if (confirm('Please sign in to bookmark trends. Would you like to go to the login page?')) {
+        router.push('/login');
+      }
+      return;
+    }
+    toggleBookmark(trend.id);
+  };
+
   const getMomentumColor = (momentum: string) => {
     switch (momentum) {
       case 'Early Signal': return 'text-red-400 bg-red-400/10 border-red-400/20';
@@ -107,7 +118,6 @@ export default function TrendDetailPage() {
             <p className="text-xl text-slate-300 mb-6 font-light">{trend.title}</p>
 
             <div className="flex items-center gap-6 text-sm text-slate-400">
-              <span>{new Date(trend.dateAdded).toLocaleDateString()}</span>
               <span>Source: {trend.author}</span>
             </div>
           </motion.div>
@@ -315,13 +325,13 @@ export default function TrendDetailPage() {
                   <Button
                     variant={bookmarked ? "secondary" : "primary"}
                     fullWidth
-                    onClick={() => toggleBookmark(trend.id)}
+                    onClick={handleBookmarkClick}
                     className="flex items-center justify-center gap-2"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill={bookmarked ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
                     </svg>
-                    {bookmarked ? 'Remove from Saved' : 'Save Trend'}
+                    {bookmarked ? 'Remove from Saved' : user ? 'Save Trend' : 'Sign in to Save'}
                   </Button>
                 ) : (
                   <Link href="/login" className="block">

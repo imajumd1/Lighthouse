@@ -277,3 +277,57 @@ export const verticalsApi = {
     return apiFetch('/verticals');
   },
 };
+
+// ============================================================================
+// Chat API
+// ============================================================================
+
+export interface ChatMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+}
+
+export interface ChatRequest {
+  message: string;
+  conversation_history?: ChatMessage[];
+}
+
+export interface ChatResponse {
+  message: string;
+  role: 'assistant';
+}
+
+export const chatApi = {
+  async sendMessage(data: ChatRequest): Promise<ChatResponse> {
+    // Chat API is at /api/chat, not /api/v1/chat
+    const CHAT_API_URL = typeof window !== 'undefined'
+      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:8002'
+      : 'http://localhost:8002';
+    
+    const response = await fetch(`${CHAT_API_URL}/api/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const error: ApiError = await response.json().catch(() => ({
+        error: 'An error occurred',
+      }));
+      throw new Error(error.error || `HTTP ${response.status}`);
+    }
+
+    return response.json();
+  },
+
+  async healthCheck(): Promise<{ status: string; service: string; openai_configured: boolean }> {
+    const CHAT_API_URL = typeof window !== 'undefined'
+      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:8002'
+      : 'http://localhost:8002';
+    
+    const response = await fetch(`${CHAT_API_URL}/api/chat/health`);
+    return response.json();
+  },
+};

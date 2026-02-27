@@ -13,9 +13,16 @@ export default function Home() {
   const [selectedVertical, setSelectedVertical] = useState<string | null>(null);
 
   const filteredTrends = useMemo(() => {
+    const twoYearsAgo = new Date();
+    twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+    
     return trends.filter(trend => {
       // Filter by status (only current)
       if (trend.status !== 'current') return false;
+
+      // Filter out articles older than 2 years
+      const articleDate = new Date(trend.dateAdded);
+      if (articleDate < twoYearsAgo) return false;
 
       // Filter by search query
       if (searchQuery) {

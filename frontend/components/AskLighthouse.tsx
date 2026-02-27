@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useApp } from '../context/AppContext';
+import { chatApi, ChatMessage as ApiChatMessage } from '../lib/api';
 
 interface Message {
   id: string;
@@ -198,7 +199,7 @@ const AskLighthouse = () => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isTyping) return;
 
     const userMsg: Message = {
       id: Date.now().toString(),
@@ -211,20 +212,44 @@ const AskLighthouse = () => {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate AI processing time (randomized for realism)
-    const delay = Math.floor(Math.random() * 1500) + 1000; // 1-2.5 seconds
-    
-    setTimeout(() => {
-      const responseText = generateResponse(userMsg.content);
+    try {
+      // Build conversation history for API (exclude welcome message)
+      const conversationHistory: ApiChatMessage[] = messages
+        .filter(msg => msg.id !== 'welcome')
+        .map(msg => ({
+          role: msg.role,
+          content: msg.content
+        }));
+
+      // Call OpenAI API via backend
+      const response = await chatApi.sendMessage({
+        message: userMsg.content,
+        conversation_history: conversationHistory
+      });
+
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: responseText,
+        content: response.message,
         timestamp: new Date(),
       };
+      
       setMessages(prev => [...prev, aiMsg]);
+    } catch (error) {
+      console.error('[AskLighthouse] Error calling chat API:', error);
+      
+      // Fallback to local response if API fails
+      const fallbackMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `I apologize, but I'm having trouble connecting to my AI service right now. ${error instanceof Error ? error.message : 'Please try again later.'}\n\nIn the meantime, you can explore the trends on this platform for strategic insights.`,
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, fallbackMsg]);
+    } finally {
       setIsTyping(false);
-    }, delay);
+    }
   };
 
   return (

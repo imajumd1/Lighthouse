@@ -1,0 +1,434 @@
+{
+  "sources": [
+    {
+      "category": "Frontier AI Labs & Model Developers",
+      "sources": [
+        {
+          "name": "OpenAI Blog",
+          "url": "https://openai.com/blog",
+          "rss_feed": "https://openai.com/blog/rss.xml",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Anthropic Blog",
+          "url": "https://www.anthropic.com/news",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Google DeepMind Blog",
+          "url": "https://deepmind.google/discover/blog/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Meta AI Blog",
+          "url": "https://ai.meta.com/blog/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Mistral AI Blog",
+          "url": "https://mistral.ai/news/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Cohere Blog",
+          "url": "https://cohere.com/blog",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "xAI Blog",
+          "url": "https://x.ai/blog",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Stability AI Blog",
+          "url": "https://stability.ai/news",
+          "scrape_enabled": true,
+          "priority": "medium"
+        }
+      ]
+    },
+    {
+      "category": "Enterprise AI & Strategy Publications",
+      "sources": [
+        {
+          "name": "McKinsey Insights",
+          "url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Boston Consulting Group (BCG) Insights",
+          "url": "https://www.bcg.com/capabilities/artificial-intelligence/insights",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Bain & Company Insights",
+          "url": "https://www.bain.com/insights/topics/artificial-intelligence/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Harvard Business Review (HBR)",
+          "url": "https://hbr.org/topic/subject/artificial-intelligence",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Gartner Research",
+          "url": "https://www.gartner.com/en/topics/artificial-intelligence",
+          "scrape_enabled": false,
+          "priority": "high",
+          "note": "Requires subscription"
+        },
+        {
+          "name": "Forrester Research",
+          "url": "https://www.forrester.com/blogs/category/artificial-intelligence/",
+          "scrape_enabled": false,
+          "priority": "high",
+          "note": "Requires subscription"
+        },
+        {
+          "name": "Deloitte Insights (AI & Analytics)",
+          "url": "https://www2.deloitte.com/us/en/insights/focus/cognitive-technologies.html",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "PwC AI Publications",
+          "url": "https://www.pwc.com/gx/en/issues/data-and-analytics/artificial-intelligence.html",
+          "scrape_enabled": true,
+          "priority": "medium"
+        }
+      ]
+    },
+    {
+      "category": "Data, Infrastructure & AI Engineering Blogs",
+      "sources": [
+        {
+          "name": "Databricks Blog",
+          "url": "https://www.databricks.com/blog",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Snowflake Blog",
+          "url": "https://www.snowflake.com/blog/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "dbt Labs Blog",
+          "url": "https://www.getdbt.com/blog",
+          "scrape_enabled": true,
+          "priority": "low"
+        },
+        {
+          "name": "NVIDIA AI Blog",
+          "url": "https://blogs.nvidia.com/blog/category/deep-learning/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Hugging Face Blog",
+          "url": "https://huggingface.co/blog",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Netflix Tech Blog",
+          "url": "https://netflixtechblog.com/",
+          "scrape_enabled": true,
+          "priority": "low"
+        },
+        {
+          "name": "Uber Engineering Blog",
+          "url": "https://www.uber.com/blog/engineering/",
+          "scrape_enabled": true,
+          "priority": "low"
+        },
+        {
+          "name": "Airbnb Engineering Blog",
+          "url": "https://medium.com/airbnb-engineering",
+          "scrape_enabled": true,
+          "priority": "low"
+        },
+        {
+          "name": "Microsoft Engineering Blog",
+          "url": "https://devblogs.microsoft.com/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "AWS Machine Learning Blog",
+          "url": "https://aws.amazon.com/blogs/machine-learning/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Google Cloud AI Blog",
+          "url": "https://cloud.google.com/blog/products/ai-machine-learning",
+          "scrape_enabled": true,
+          "priority": "medium"
+        }
+      ]
+    },
+    {
+      "category": "Academic & Research Sources",
+      "sources": [
+        {
+          "name": "arXiv (cs.AI, cs.LG categories)",
+          "url": "https://arxiv.org/list/cs.AI/recent",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Stanford HAI Publications",
+          "url": "https://hai.stanford.edu/news",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "MIT CSAIL Research Blog",
+          "url": "https://www.csail.mit.edu/news",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Berkeley AI Research (BAIR) Blog",
+          "url": "https://bair.berkeley.edu/blog/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Carnegie Mellon AI Research",
+          "url": "https://www.cs.cmu.edu/news",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Allen Institute for AI (AI2) Blog",
+          "url": "https://allenai.org/blog",
+          "scrape_enabled": true,
+          "priority": "high"
+        }
+      ]
+    },
+    {
+      "category": "Venture Capital & Investment Trend Sources",
+      "sources": [
+        {
+          "name": "Andreessen Horowitz (a16z) AI Blog",
+          "url": "https://a16z.com/tag/ai/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Sequoia Capital AI Publications",
+          "url": "https://www.sequoiacap.com/article/ai/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Greylock Partners AI Blog",
+          "url": "https://greylock.com/greymatter/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Insight Partners AI Blog",
+          "url": "https://www.insightpartners.com/blog/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Lightspeed Venture AI Blog",
+          "url": "https://lsvp.com/stories/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Accel AI Market Insights",
+          "url": "https://www.accel.com/noteworthy",
+          "scrape_enabled": true,
+          "priority": "medium"
+        }
+      ]
+    },
+    {
+      "category": "AI News & Market Intelligence",
+      "sources": [
+        {
+          "name": "MIT Technology Review (AI Section)",
+          "url": "https://www.technologyreview.com/topic/artificial-intelligence/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "The Information (AI Coverage)",
+          "url": "https://www.theinformation.com/ai",
+          "scrape_enabled": false,
+          "priority": "high",
+          "note": "Requires subscription"
+        },
+        {
+          "name": "Financial Times (AI & Tech)",
+          "url": "https://www.ft.com/artificial-intelligence",
+          "scrape_enabled": false,
+          "priority": "high",
+          "note": "Requires subscription"
+        },
+        {
+          "name": "Bloomberg Technology",
+          "url": "https://www.bloomberg.com/technology",
+          "scrape_enabled": false,
+          "priority": "high",
+          "note": "Requires subscription"
+        },
+        {
+          "name": "Wall Street Journal – AI Coverage",
+          "url": "https://www.wsj.com/tech/ai",
+          "scrape_enabled": false,
+          "priority": "high",
+          "note": "Requires subscription"
+        },
+        {
+          "name": "TechCrunch AI Section",
+          "url": "https://techcrunch.com/category/artificial-intelligence/",
+          "rss_feed": "https://techcrunch.com/category/artificial-intelligence/feed/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "VentureBeat AI Section",
+          "url": "https://venturebeat.com/category/ai/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        }
+      ]
+    },
+    {
+      "category": "Policy, Governance & Regulation",
+      "sources": [
+        {
+          "name": "European Commission – AI Act Updates",
+          "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "White House AI Policy Announcements",
+          "url": "https://www.whitehouse.gov/briefing-room/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "OECD AI Policy Observatory",
+          "url": "https://oecd.ai/en/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "World Economic Forum – AI Governance",
+          "url": "https://www.weforum.org/agenda/archive/artificial-intelligence/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Brookings Institution AI Research",
+          "url": "https://www.brookings.edu/topic/artificial-intelligence/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Center for Security and Emerging Technology (CSET)",
+          "url": "https://cset.georgetown.edu/publications/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        }
+      ]
+    },
+    {
+      "category": "High-Signal Substacks & Independent AI Analysts",
+      "sources": [
+        {
+          "name": "Stratechery (Ben Thompson)",
+          "url": "https://stratechery.com/",
+          "scrape_enabled": false,
+          "priority": "high",
+          "note": "Requires subscription"
+        },
+        {
+          "name": "The Pragmatic Engineer (Gergely Orosz)",
+          "url": "https://newsletter.pragmaticengineer.com/",
+          "scrape_enabled": false,
+          "priority": "medium",
+          "note": "Requires subscription"
+        },
+        {
+          "name": "Not Boring (Packy McCormick)",
+          "url": "https://www.notboring.co/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "AI Snake Oil (Arvind Narayanan)",
+          "url": "https://www.aisnakeoil.com/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Import AI (Jack Clark)",
+          "url": "https://jack-clark.net/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "The Sequence (AI Newsletter)",
+          "url": "https://thesequence.substack.com/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Latent Space (AI Engineering Focus)",
+          "url": "https://www.latent.space/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Ben's Bites (AI Daily Digest)",
+          "url": "https://www.bensbites.co/",
+          "scrape_enabled": true,
+          "priority": "high"
+        },
+        {
+          "name": "Nathan Lambert's Interconnects",
+          "url": "https://www.interconnects.ai/",
+          "scrape_enabled": true,
+          "priority": "medium"
+        },
+        {
+          "name": "Ethan Mollick's One Useful Thing",
+          "url": "https://www.oneusefulthing.org/",
+          "scrape_enabled": true,
+          "priority": "high"
+        }
+      ]
+    }
+  ],
+  "scraping_config": {
+    "frequency": "daily",
+    "max_articles_per_source": 10,
+    "lookback_days": 7,
+    "min_article_length": 500,
+    "exclude_keywords": ["sponsored", "advertisement", "press release"],
+    "user_agent": "LighthouseAI-TrendBot/1.0 (AI Trend Analysis Platform)"
+  }
+}

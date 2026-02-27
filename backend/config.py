@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     jwt_secret: str
     jwt_expires_in: int = 604800  # 7 days in seconds
     cors_origins: str = "http://localhost:3000"
+    openai_api_key: str
     
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -18,7 +18,6 @@ interface AppContextType {
   archiveTrend: (id: string) => void;
   toggleBookmark: (trendId: string) => void;
   isBookmarked: (trendId: string) => boolean;
-  refreshTrends: () => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -29,77 +28,42 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch trends from scraping API
-  const fetchTrends = async () => {
-    try {
-      console.log('[AppContext] Fetching trends from scraping API...');
-      const response = await fetch('http://localhost:8002/api/trends/discover?top_n=10&lookback_days=7', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('[AppContext] ✅ Fetched trends from API:', data.count, 'trends');
-      
-      // Transform API trends to match frontend format
-      const transformedTrends: Trend[] = data.trends.map((trend: any) => ({
-        ...trend,
-        // Ensure all required fields are present with defaults
-        imageUrl: trend.imageUrl || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000',
-        additionalSources: trend.additionalSources || [],
-      }));
-      
-      setTrends(transformedTrends);
-      return transformedTrends;
-    } catch (error) {
-      console.error('[AppContext] ❌ Error fetching trends from API:', error);
-      console.warn('[AppContext] ⚠️ Falling back to MOCK_TRENDS');
-      setTrends(MOCK_TRENDS);
-      return MOCK_TRENDS;
-    }
-  };
-
   // Load initial data
   useEffect(() => {
-    const loadInitialData = async () => {
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setTrends(MOCK_TRENDS);
+      
       // Check for saved user in localStorage
-      const savedUser = localStorage.getItem('lighthouse_user');
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
-      }
-      
-      // Load bookmarks
-      const savedBookmarks = localStorage.getItem('lighthouse_bookmarks');
-      if (savedBookmarks) {
-        setBookmarks(JSON.parse(savedBookmarks));
+      try {
+        const savedUser = localStorage.getItem('lighthouse_user');
+        if (savedUser) {
+          setUser(JSON.parse(savedUser));
+        }
+        
+        // Load bookmarks
+        const savedBookmarks = localStorage.getItem('lighthouse_bookmarks');
+        if (savedBookmarks) {
+          setBookmarks(JSON.parse(savedBookmarks));
+        }
+      } catch (error) {
+        console.error("Error loading from localStorage:", error);
       }
 
-      // Fetch trends from API
-      await fetchTrends();
-      
       setIsLoading(false);
-    };
+    }, 1000);
 
-    loadInitialData();
+    return () => clearTimeout(timer);
   }, []);
-
-  // Refresh trends function
-  const refreshTrends = async () => {
-    setIsLoading(true);
-    await fetchTrends();
-    setIsLoading(false);
-  };
 
   // Persist bookmarks
   useEffect(() => {
     if (!isLoading) {
-      localStorage.setItem('lighthouse_bookmarks', JSON.stringify(bookmarks));
+      try {
+        localStorage.setItem('lighthouse_bookmarks', JSON.stringify(bookmarks));
+      } catch (error) {
+        console.error("Error saving bookmarks:", error);
+      }
     }
   }, [bookmarks, isLoading]);
 
@@ -110,7 +74,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         const foundUser = MOCK_USERS.find(u => u.email.toLowerCase() === email.toLowerCase());
         if (foundUser) {
           setUser(foundUser);
-          localStorage.setItem('lighthouse_user', JSON.stringify(foundUser));
+          try {
+            localStorage.setItem('lighthouse_user', JSON.stringify(foundUser));
+          } catch (error) {
+            console.error("Error saving user:", error);
+          }
           resolve(true);
         } else {
           resolve(false);
@@ -142,7 +110,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         // In a real app, we'd add to MOCK_USERS or DB
         setUser(newUser);
-        localStorage.setItem('lighthouse_user', JSON.stringify(newUser));
+        try {
+          localStorage.setItem('lighthouse_user', JSON.stringify(newUser));
+        } catch (error) {
+          console.error("Error saving new user:", error);
+        }
         resolve(true);
         setIsLoading(false);
       }, 800);
@@ -151,7 +123,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('lighthouse_user');
+    try {
+      localStorage.removeItem('lighthouse_user');
+    } catch (error) {
+      console.error("Error removing user:", error);
+    }
   };
 
   const addTrend = (trendData: Omit<Trend, 'id' | 'dateAdded' | 'author'>) => {
@@ -209,8 +185,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       updateTrend,
       archiveTrend,
       toggleBookmark,
-      isBookmarked,
-      refreshTrends
+      isBookmarked
     }}>
       {children}
     </AppContext.Provider>

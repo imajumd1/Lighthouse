@@ -4,10 +4,10 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User, Trend, Bookmark, Vertical } from '../lib/types';
 import { MOCK_USERS, MOCK_TRENDS, VERTICALS } from '../lib/data';
 
-// Get API base URL from environment or default to localhost
+// Get API base URL from environment or default to production backend
 const API_BASE_URL = typeof window !== 'undefined'
-  ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:8000'
-  : 'http://localhost:8000';
+  ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://lighthouse-backend-fc77.onrender.com'
+  : 'https://lighthouse-backend-fc77.onrender.com';
 
 interface AppContextType {
   user: User | null;

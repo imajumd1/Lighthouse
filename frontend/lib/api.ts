@@ -1,11 +1,11 @@
 /**
  * API client for Lighthouse backend
- * Base URL: http://localhost:8002/api/v1
+ * Base URL: http://localhost:8000/api/v1
  */
 
 const API_BASE_URL = typeof window !== 'undefined'
-  ? (window as any).NEXT_PUBLIC_API_URL || 'http://localhost:8002/api/v1'
-  : 'http://localhost:8002/api/v1';
+  ? (window as any).NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1'
+  : 'http://localhost:8000/api/v1';
 
 interface ApiError {
   error: string;
@@ -301,8 +301,8 @@ export const chatApi = {
   async sendMessage(data: ChatRequest): Promise<ChatResponse> {
     // Chat API is at /api/chat, not /api/v1/chat
     const CHAT_API_URL = typeof window !== 'undefined'
-      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:8002'
-      : 'http://localhost:8002';
+      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:8000'
+      : 'http://localhost:8000';
     
     const response = await fetch(`${CHAT_API_URL}/api/chat`, {
       method: 'POST',
@@ -324,8 +324,8 @@ export const chatApi = {
 
   async healthCheck(): Promise<{ status: string; service: string; openai_configured: boolean }> {
     const CHAT_API_URL = typeof window !== 'undefined'
-      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:8002'
-      : 'http://localhost:8002';
+      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api/v1', '') || 'http://localhost:8000'
+      : 'http://localhost:8000';
     
     const response = await fetch(`${CHAT_API_URL}/api/chat/health`);
     return response.json();

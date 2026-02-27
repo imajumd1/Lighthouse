@@ -33,7 +33,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const fetchTrends = async () => {
     try {
       console.log('[AppContext] Fetching trends from scraping API...');
-      const response = await fetch('http://localhost:8002/api/trends/discover?top_n=10&lookback_days=7', {
+      const response = await fetch('http://localhost:8000/api/trends/discover?top_n=10&lookback_days=7', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,8 +48,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       console.log('[AppContext] ✅ Fetched trends from API:', data.count, 'trends');
       
       // Transform API trends to match frontend format
-      const transformedTrends: Trend[] = data.trends.map((trend: any) => ({
+      const transformedTrends: Trend[] = data.trends.map((trend: any, index: number) => ({
         ...trend,
+        // Generate unique ID if not present
+        id: trend.id || `trend-${Date.now()}-${index}`,
         // Ensure all required fields are present with defaults
         imageUrl: trend.imageUrl || 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000',
         additionalSources: trend.additionalSources || [],

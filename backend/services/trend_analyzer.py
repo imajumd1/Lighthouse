@@ -39,10 +39,10 @@ class TrendAnalyzer:
         
         try:
             # Prepare article summaries for analysis and get source references
-            article_summaries, source_references = self._prepare_article_summaries(articles)
+            article_summaries_str, source_references = self._prepare_article_summaries(articles)
             
             # Call OpenAI to analyze trends
-            trends = await self._call_openai_for_trends(article_summaries, top_n, source_references)
+            trends = await self._call_openai_for_trends(article_summaries_str, top_n, source_references)
             
             logger.info(f"Identified {len(trends)} trends from {len(articles)} articles")
             return trends
@@ -78,7 +78,7 @@ class TrendAnalyzer:
     
     async def _call_openai_for_trends(
         self,
-        article_summaries: str,
+        article_summaries_str: str,
         top_n: int,
         source_references: List[Dict]
     ) -> List[Dict]:
@@ -107,7 +107,7 @@ Focus on trends that are:
 
         user_prompt = f"""Analyze these recent articles and identify the top {top_n} AI trends:
 
-{article_summaries}
+{article_summaries_str}
 
 For each trend, cite the specific article numbers (e.g., [1], [3], [5]) that support your analysis.
 
@@ -183,7 +183,7 @@ Return ONLY the JSON array, no other text."""
                 trend.setdefault('howConsultanciesLeverage', 'Strategic advisory and implementation services')
                 trend.setdefault('analysisDetail', trend.get('strategicImpact', ''))
                 newline_char = '\n'
-                article_count = len(article_summaries.split(newline_char))
+                article_count = len(article_summaries_str.split(newline_char))
                 trend.setdefault('confidenceReasoning', f"Based on analysis of {article_count} recent articles from {len(additional_sources)} sources")
                 trend.setdefault('marketValidation', 'Multiple sources confirm this trend')
                 trend.setdefault('financialSignal', 'Significant market activity observed')

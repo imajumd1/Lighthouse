@@ -113,6 +113,25 @@ const TrendCard = ({ trend, index }: TrendCardProps) => {
               <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-2">
                 {trend.justificationSummary}
               </p>
+              
+              {/* Keywords */}
+              {trend.keywords && trend.keywords.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {trend.keywords.slice(0, 6).map((keyword, idx) => (
+                    <span
+                      key={idx}
+                      className="text-xs px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                  {trend.keywords.length > 6 && (
+                    <span className="text-xs text-slate-500 px-2 py-0.5">
+                      +{trend.keywords.length - 6}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="flex flex-wrap items-center gap-2 mt-2">

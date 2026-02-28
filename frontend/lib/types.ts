@@ -40,6 +40,7 @@ export interface Trend {
   title: string; // Internal title
   headline: string; // Executive summary headline (10 words max)
   trendCategory: TrendCategory;
+  keywords?: string[]; // Key terms and concepts for this trend
   
   // Core Analysis
   justificationSummary: string; // 3-Bullet Executive Summary

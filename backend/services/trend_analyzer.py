@@ -38,11 +38,11 @@ class TrendAnalyzer:
             return []
         
         try:
-            # Prepare article summaries for analysis
-            article_summaries = self._prepare_article_summaries(articles)
+            # Prepare article summaries for analysis and get source references
+            article_summaries, source_references = self._prepare_article_summaries(articles)
             
             # Call OpenAI to analyze trends
-            trends = await self._call_openai_for_trends(article_summaries, top_n)
+            trends = await self._call_openai_for_trends(article_summaries, top_n, source_references)
             
             logger.info(f"Identified {len(trends)} trends from {len(articles)} articles")
             return trends
@@ -51,37 +51,53 @@ class TrendAnalyzer:
             logger.error(f"Error analyzing trends: {str(e)}")
             return []
     
-    def _prepare_article_summaries(self, articles: List[Dict]) -> str:
-        """Prepare article summaries for OpenAI analysis."""
+    def _prepare_article_summaries(self, articles: List[Dict]) -> tuple[str, List[Dict]]:
+        """Prepare article summaries for OpenAI analysis and return source references."""
         summaries = []
+        source_references = []
         
         for i, article in enumerate(articles[:50], 1):  # Limit to 50 articles to avoid token limits
             title = article.get('title', 'Untitled')
             source = article.get('source', 'Unknown')
+            url = article.get('url', article.get('link', ''))
+            published = article.get('published', article.get('pubDate', ''))
             summary = article.get('summary', article.get('content', ''))[:500]  # Limit length
             
-            summaries.append(f"{i}. [{source}] {title}\n   {summary}\n")
+            summaries.append(f"{i}. [{source}] {title}\n   URL: {url}\n   {summary}\n")
+            
+            # Store source reference
+            source_references.append({
+                'id': f'source-{i}',
+                'title': title,
+                'url': url,
+                'publisher': source,
+                'date': published
+            })
         
-        return "\n".join(summaries)
+        return "\n".join(summaries), source_references
     
     async def _call_openai_for_trends(
         self,
         article_summaries: str,
-        top_n: int
+        top_n: int,
+        source_references: List[Dict]
     ) -> List[Dict]:
         """Call OpenAI API to identify trends from articles."""
         
-        system_prompt = """You are an expert AI trend analyst for Lighthouse, a strategic intelligence platform. 
+        system_prompt = """You are an expert AI trend analyst for Lighthouse, a strategic intelligence platform.
 Your role is to analyze recent articles and identify the most significant AI trends that executives and decision-makers need to know about.
 
 For each trend you identify, provide:
 1. A clear, compelling headline (10-15 words)
-2. A one-sentence summary of why this trend matters
-3. The trend category (e.g., "Model Development", "Enterprise Adoption", "Regulation", "Infrastructure", "Market Dynamics")
-4. Time horizon (Immediate: 0-6 months, Near-term: 6-18 months, Long-term: 18+ months)
-5. Confidence score (1-10) based on signal strength
-6. Strategic impact (brief explanation of business implications)
-7. Key risk factors
+2. Keywords: 5-8 key terms that define this trend (e.g., "LLM", "fine-tuning", "enterprise adoption")
+3. Executive Summary: 3-4 bullet points explaining why this trend matters
+4. Comprehensive Analysis: 3-4 paragraphs providing deep strategic insights
+5. The trend category (e.g., "Model Development", "Enterprise Adoption", "Regulation", "Infrastructure", "Market Dynamics")
+6. Time horizon (Immediate: 0-6 months, Near-term: 6-18 months, Long-term: 18+ months)
+7. Confidence score (1-10) based on signal strength
+8. Strategic impact (business implications)
+9. Key risk factors
+10. Source article numbers that support this trend (reference the article numbers from the input)
 
 Focus on trends that are:
 - Actionable for business leaders
@@ -93,18 +109,24 @@ Focus on trends that are:
 
 {article_summaries}
 
+For each trend, cite the specific article numbers (e.g., [1], [3], [5]) that support your analysis.
+
 Return ONLY a valid JSON array of trend objects with this exact structure:
 [
   {{
     "headline": "Clear, compelling headline",
     "title": "Formal trend title",
+    "keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
     "trendCategory": "Category name",
+    "justificationSummary": "• Bullet point 1\\n• Bullet point 2\\n• Bullet point 3",
     "whyTrend": "One sentence on why this matters",
+    "analysisDetail": "Comprehensive 3-4 paragraph analysis with strategic insights and market context",
     "timeHorizon": "Immediate|Near-term|Long-term",
     "confidenceScore": 8,
     "strategicImpact": "Business implications",
     "riskGovernance": "Key risk factors",
-    "affectedVerticals": ["Healthcare", "Finance", "etc"]
+    "affectedVerticals": ["Healthcare", "Finance", "etc"],
+    "sourceArticleNumbers": [1, 3, 5]
   }}
 ]
 
@@ -133,20 +155,36 @@ Return ONLY the JSON array, no other text."""
             
             trends = json.loads(content)
             
-            # Enrich trends with metadata
+            # Enrich trends with metadata and source references
             for trend in trends:
                 trend['dateAdded'] = datetime.utcnow().isoformat()
                 trend['status'] = 'current'
                 trend['author'] = 'Lighthouse AI Analyzer'
-                trend['sourceUrl'] = 'https://lighthouse.ai/trends'
+                
+                # Map source article numbers to actual source references
+                source_article_numbers = trend.get('sourceArticleNumbers', [])
+                additional_sources = []
+                primary_source_url = 'https://lighthouse.ai/trends'
+                
+                for article_num in source_article_numbers:
+                    if 0 < article_num <= len(source_references):
+                        source_ref = source_references[article_num - 1]
+                        additional_sources.append(source_ref)
+                        # Use first source as primary
+                        if not primary_source_url or primary_source_url == 'https://lighthouse.ai/trends':
+                            primary_source_url = source_ref.get('url', 'https://lighthouse.ai/trends')
+                
+                trend['sourceUrl'] = primary_source_url
+                trend['additionalSources'] = additional_sources
                 
                 # Set default values for missing fields
+                trend.setdefault('keywords', [])
                 trend.setdefault('justificationSummary', trend.get('whyTrend', ''))
                 trend.setdefault('howConsultanciesLeverage', 'Strategic advisory and implementation services')
                 trend.setdefault('analysisDetail', trend.get('strategicImpact', ''))
                 newline_char = '\n'
                 article_count = len(article_summaries.split(newline_char))
-                trend.setdefault('confidenceReasoning', f"Based on analysis of {article_count} recent articles")
+                trend.setdefault('confidenceReasoning', f"Based on analysis of {article_count} recent articles from {len(additional_sources)} sources")
                 trend.setdefault('marketValidation', 'Multiple sources confirm this trend')
                 trend.setdefault('financialSignal', 'Significant market activity observed')
                 trend.setdefault('competitiveIntelligence', 'Multiple players active in this space')
@@ -161,6 +199,9 @@ Return ONLY the JSON array, no other text."""
                     'regulatoryFriction': 5,
                     'competitiveIntensity': 8
                 })
+                
+                # Remove temporary field
+                trend.pop('sourceArticleNumbers', None)
             
             return trends
             

@@ -140,7 +140,7 @@ Return ONLY the JSON array, no other text."""
                     {"role": "user", "content": user_prompt}
                 ],
                 temperature=0.7,
-                max_tokens=2000
+                max_tokens=4000
             )
             
             # Parse response

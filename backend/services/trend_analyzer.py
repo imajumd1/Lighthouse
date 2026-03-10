@@ -66,7 +66,8 @@ class TrendAnalyzer:
             raw_summary = article.get('summary') or article.get('content') or ''
             summary = (str(raw_summary))[:500]  # Limit length
             
-            summaries.append(f"{i}. [{source}] {title}\n   URL: {url}\n   {summary}\n")
+            # Use [Article N] format instead of "N." to avoid confusion with bullet points
+            summaries.append(f"[Article {i}] Source: {source}\nTitle: {title}\nURL: {url}\nSummary: {summary}\n")
             
             # Store source reference
             source_references.append({
@@ -112,7 +113,9 @@ Focus on trends that are:
 
 {article_summaries_str}
 
-For each trend, cite the specific article numbers (e.g., [1], [3], [5]) that support your analysis.
+For each trend, note which article numbers support your analysis (e.g., 1, 3, 5) in the sourceArticleNumbers field.
+
+IMPORTANT: Do NOT include article numbers, citations, or numbered lists in the text fields (headline, justificationSummary, analysisDetail, etc.). Write clean, professional content without reference numbers.
 
 Return a JSON object with a "trends" key containing an array of trend objects. Use this exact structure:
 {{

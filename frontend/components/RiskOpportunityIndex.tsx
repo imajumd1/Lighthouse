@@ -9,10 +9,19 @@ interface RiskOpportunityIndexProps {
 }
 
 const RiskOpportunityIndex = ({ trends }: RiskOpportunityIndexProps) => {
-  // Calculate aggregate scores
-  const avgRisk = trends.reduce((acc, t) => acc + (t.heatMapScores?.regulatoryFriction || 0), 0) / trends.length;
-  const avgOpportunity = trends.reduce((acc, t) => acc + (t.heatMapScores?.capitalBacking || 0), 0) / trends.length;
-  const avgMaturity = trends.reduce((acc, t) => acc + (t.heatMapScores?.capabilityMaturity || 0), 0) / trends.length;
+  // Calculate aggregate scores (guard against empty array to avoid NaN)
+  const n = trends.length;
+  
+  // Only calculate if we have trends, otherwise use null to show placeholder
+  const avgRisk = n > 0 ? trends.reduce((acc, t) => acc + (t.heatMapScores?.regulatoryFriction || 0), 0) / n : null;
+  const avgOpportunity = n > 0 ? trends.reduce((acc, t) => acc + (t.heatMapScores?.capitalBacking || 0), 0) / n : null;
+  const avgMaturity = n > 0 ? trends.reduce((acc, t) => acc + (t.heatMapScores?.capabilityMaturity || 0), 0) / n : null;
+  
+  // Helper function to display score or placeholder
+  const displayScore = (score: number | null) => {
+    if (score === null) return '—';
+    return score.toFixed(1);
+  };
 
   return (
     <div className="mb-12">
@@ -45,7 +54,7 @@ const RiskOpportunityIndex = ({ trends }: RiskOpportunityIndexProps) => {
                 </svg>
               </div>
               <div className="flex items-end gap-3">
-                <span className="text-4xl font-bold text-white">{avgOpportunity.toFixed(1)}</span>
+                <span className="text-4xl font-bold text-white">{displayScore(avgOpportunity)}</span>
                 <span className="text-sm text-slate-400 mb-1">/ 10</span>
               </div>
               <p className="text-xs text-slate-500 mt-2">High capital inflow indicates strong market validation.</p>
@@ -60,7 +69,7 @@ const RiskOpportunityIndex = ({ trends }: RiskOpportunityIndexProps) => {
                 </svg>
               </div>
               <div className="flex items-end gap-3">
-                <span className="text-4xl font-bold text-white">{avgRisk.toFixed(1)}</span>
+                <span className="text-4xl font-bold text-white">{displayScore(avgRisk)}</span>
                 <span className="text-sm text-slate-400 mb-1">/ 10</span>
               </div>
               <p className="text-xs text-slate-500 mt-2">Higher score indicates increasing compliance barriers.</p>
@@ -75,7 +84,7 @@ const RiskOpportunityIndex = ({ trends }: RiskOpportunityIndexProps) => {
                 </svg>
               </div>
               <div className="flex items-end gap-3">
-                <span className="text-4xl font-bold text-white">{avgMaturity.toFixed(1)}</span>
+                <span className="text-4xl font-bold text-white">{displayScore(avgMaturity)}</span>
                 <span className="text-sm text-slate-400 mb-1">/ 10</span>
               </div>
               <p className="text-xs text-slate-500 mt-2">Readiness for enterprise-scale deployment.</p>

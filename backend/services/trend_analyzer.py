@@ -60,8 +60,11 @@ class TrendAnalyzer:
             title = article.get('title', 'Untitled')
             source = article.get('source', 'Unknown')
             url = article.get('url', article.get('link', ''))
-            published = article.get('published', article.get('pubDate', ''))
-            summary = article.get('summary', article.get('content', ''))[:500]  # Limit length
+            published = article.get('published') or article.get('pubDate') or article.get('published_date') or ''
+            if hasattr(published, 'isoformat'):
+                published = published.isoformat()
+            raw_summary = article.get('summary') or article.get('content') or ''
+            summary = (str(raw_summary))[:500]  # Limit length
             
             summaries.append(f"{i}. [{source}] {title}\n   URL: {url}\n   {summary}\n")
             
@@ -111,26 +114,28 @@ Focus on trends that are:
 
 For each trend, cite the specific article numbers (e.g., [1], [3], [5]) that support your analysis.
 
-Return ONLY a valid JSON array of trend objects with this exact structure:
-[
-  {{
-    "headline": "Clear, compelling headline",
-    "title": "Formal trend title",
-    "keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
-    "trendCategory": "Category name",
-    "justificationSummary": "• Bullet point 1\\n• Bullet point 2\\n• Bullet point 3",
-    "whyTrend": "One sentence on why this matters",
-    "analysisDetail": "Comprehensive 3-4 paragraph analysis with strategic insights and market context",
-    "timeHorizon": "Immediate|Near-term|Long-term",
-    "confidenceScore": 8,
-    "strategicImpact": "Business implications",
-    "riskGovernance": "Key risk factors",
-    "affectedVerticals": ["Healthcare", "Finance", "etc"],
-    "sourceArticleNumbers": [1, 3, 5]
-  }}
-]
+Return a JSON object with a "trends" key containing an array of trend objects. Use this exact structure:
+{{
+  "trends": [
+    {{
+      "headline": "Clear, compelling headline (max 15 words)",
+      "title": "Formal trend title",
+      "keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
+      "trendCategory": "Category name",
+      "justificationSummary": "• Bullet point 1\\n• Bullet point 2\\n• Bullet point 3",
+      "whyTrend": "One sentence on why this matters",
+      "analysisDetail": "Comprehensive 2-3 paragraph analysis with strategic insights. Keep concise.",
+      "timeHorizon": "Immediate|Near-term|Long-term",
+      "confidenceScore": 8,
+      "strategicImpact": "Business implications (2-3 sentences max)",
+      "riskGovernance": "Key risk factors (2-3 sentences max)",
+      "affectedVerticals": ["Healthcare", "Finance", "etc"],
+      "sourceArticleNumbers": [1, 3, 5]
+    }}
+  ]
+}}
 
-Return ONLY the JSON array, no other text."""
+IMPORTANT: Keep analysisDetail, strategicImpact, and riskGovernance concise to avoid token limits. Return ONLY valid JSON."""
 
         try:
             response = self.client.chat.completions.create(
@@ -140,11 +145,19 @@ Return ONLY the JSON array, no other text."""
                     {"role": "user", "content": user_prompt}
                 ],
                 temperature=0.7,
-                max_tokens=4000
+                max_tokens=8000,  # Increased to handle longer responses
+                response_format={"type": "json_object"}  # Force JSON output
             )
             
             # Parse response
-            content = response.choices[0].message.content.strip()
+            if not response.choices:
+                logger.error("OpenAI returned no choices")
+                return []
+            msg = response.choices[0].message
+            content = (msg.content or "").strip()
+            if not content:
+                logger.error("OpenAI returned empty content")
+                return []
             
             # Remove markdown code blocks if present
             if content.startswith("```"):
@@ -153,7 +166,14 @@ Return ONLY the JSON array, no other text."""
                     content = content[4:]
                 content = content.strip()
             
-            trends = json.loads(content)
+            parsed = json.loads(content)
+            # Handle both array format and object with "trends" key
+            if isinstance(parsed, list):
+                trends = parsed
+            elif isinstance(parsed, dict):
+                trends = parsed.get('trends', [parsed])
+            else:
+                trends = []
             
             # Enrich trends with metadata and source references
             for trend in trends:

@@ -5,9 +5,7 @@ import { User, Trend, Bookmark, Vertical } from '../lib/types';
 import { MOCK_USERS, MOCK_TRENDS, VERTICALS } from '../lib/data';
 
 // Get API base URL from environment or default to production backend
-const API_BASE_URL = typeof window !== 'undefined'
-  ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://lighthouse-backend-fc77.onrender.com'
-  : 'https://lighthouse-backend-fc77.onrender.com';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://lighthouse-backend-fc77.onrender.com';
 
 interface AppContextType {
   user: User | null;

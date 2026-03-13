@@ -44,10 +44,27 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
-          <p className="text-slate-400 animate-pulse">Loading intelligence...</p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-slate-900 border border-white/10 rounded-2xl p-8 max-w-md mx-4 shadow-2xl"
+        >
+          <div className="text-center">
+            <div className="w-16 h-16 mx-auto mb-4 relative">
+              <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+              <div className="absolute inset-0 border-4 border-transparent border-t-blue-500 rounded-full animate-spin"></div>
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">
+              Analyzing Curated News Sources
+            </h3>
+            <p className="text-slate-400 mb-4">
+              Scraping 54 premium AI sources and analyzing trends with OpenAI...
+            </p>
+            <p className="text-sm text-slate-500">
+              This may take 1-2 minutes
+            </p>
+          </div>
+        </motion.div>
       </div>
     );
   }

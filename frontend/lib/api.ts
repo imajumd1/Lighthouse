@@ -4,8 +4,8 @@
  */
 
 const API_BASE_URL = typeof window !== 'undefined'
-  ? (window as any).NEXT_PUBLIC_API_URL || 'https://lighthouse-newbackend.onrender.com/api'
-  : 'https://lighthouse-newbackend.onrender.com/api';
+  ? (window as any).NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com/api')
+  : (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com/api');
 
 interface ApiError {
   error: string;
@@ -301,8 +301,8 @@ export const chatApi = {
   async sendMessage(data: ChatRequest): Promise<ChatResponse> {
     // Chat API is at /api/chat
     const CHAT_API_URL = typeof window !== 'undefined'
-      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://lighthouse-newbackend.onrender.com'
-      : 'https://lighthouse-newbackend.onrender.com';
+      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api', '') || (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com')
+      : (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com');
     
     const response = await fetch(`${CHAT_API_URL}/api/chat`, {
       method: 'POST',
@@ -324,8 +324,8 @@ export const chatApi = {
 
   async healthCheck(): Promise<{ status: string; service: string; openai_configured: boolean }> {
     const CHAT_API_URL = typeof window !== 'undefined'
-      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api', '') || 'https://lighthouse-newbackend.onrender.com'
-      : 'https://lighthouse-newbackend.onrender.com';
+      ? (window as any).NEXT_PUBLIC_API_URL?.replace('/api', '') || (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com')
+      : (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com');
     
     const response = await fetch(`${CHAT_API_URL}/api/chat/health`);
     return response.json();

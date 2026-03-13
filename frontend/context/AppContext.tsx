@@ -4,8 +4,9 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User, Trend, Bookmark, Vertical } from '../lib/types';
 import { MOCK_USERS, MOCK_TRENDS, VERTICALS } from '../lib/data';
 
-// Get API base URL from environment or default to production backend
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://lighthouse-newbackend.onrender.com/api';
+// Get API base URL from environment or default based on NODE_ENV
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com/api');
 
 interface AppContextType {
   user: User | null;

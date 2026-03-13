@@ -127,7 +127,7 @@ const AskLighthouse = () => {
     {
       id: 'welcome',
       role: 'assistant',
-      content: 'Hello. I am your Lighthouse AI analyst. I can help you synthesize market trends, assess strategic risks, or answer questions like "Are SaaS companies doomed?"',
+      content: 'Hello. I am your Lighthouse AI analyst. I can help you synthesize market trends, assess strategic risks, and answer your questions about AI trends.',
       timestamp: new Date(),
     },
   ]);
@@ -350,8 +350,8 @@ const AskLighthouse = () => {
                 </button>
               </form>
               <div className="mt-2 flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-                <button 
-                  onClick={() => setInputValue("Are SaaS companies doomed?")}
+                <button
+                  onClick={() => setInputValue("What are the top AI trends right now?")}
                   className="whitespace-nowrap px-3 py-1 bg-white/5 hover:bg-white/10 rounded-full text-xs text-slate-400 hover:text-white transition-colors border border-white/5"
                 >
                   SaaS Future

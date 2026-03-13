@@ -11,6 +11,7 @@ export default function Home() {
   const { trends, isLoading } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVertical, setSelectedVertical] = useState<string | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
 
   const filteredTrends = useMemo(() => {
     const twoYearsAgo = new Date();
@@ -24,12 +25,22 @@ export default function Home() {
       const articleDate = new Date(trend.dateAdded);
       if (articleDate < twoYearsAgo) return false;
 
+      // Filter by selected month
+      if (selectedMonth) {
+        const trendDate = new Date(trend.dateAdded);
+        const trendMonthKey = `${trendDate.getFullYear()}-${String(trendDate.getMonth() + 1).padStart(2, '0')}`;
+        if (trendMonthKey !== selectedMonth) return false;
+      }
+
       // Filter by search query
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         const matchesTitle = trend.title.toLowerCase().includes(query);
         const matchesSummary = trend.justificationSummary.toLowerCase().includes(query);
-        if (!matchesTitle && !matchesSummary) return false;
+        const matchesKeywords = trend.keywords?.some(keyword =>
+          keyword.toLowerCase().includes(query)
+        );
+        if (!matchesTitle && !matchesSummary && !matchesKeywords) return false;
       }
 
       // Filter by vertical
@@ -39,7 +50,7 @@ export default function Home() {
 
       return true;
     });
-  }, [trends, searchQuery, selectedVertical]);
+  }, [trends, searchQuery, selectedVertical, selectedMonth]);
 
   if (isLoading) {
     return (
@@ -101,11 +112,14 @@ export default function Home() {
         <RiskOpportunityIndex trends={trends.filter(t => t.status === 'current')} />
 
         {/* Filters */}
-        <TrendFilters 
+        <TrendFilters
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           selectedVertical={selectedVertical}
           setSelectedVertical={setSelectedVertical}
+          selectedMonth={selectedMonth}
+          setSelectedMonth={setSelectedMonth}
+          trends={trends.filter(t => t.status === 'current')}
         />
 
         {/* Trends Grid */}
@@ -123,8 +137,12 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-medium text-white mb-2">No trends found</h3>
               <p className="text-slate-400">Try adjusting your search or filters to find what you're looking for.</p>
-              <button 
-                onClick={() => { setSearchQuery(''); setSelectedVertical(null); }}
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedVertical(null);
+                  setSelectedMonth(null);
+                }}
                 className="mt-6 text-blue-400 hover:text-blue-300 font-medium"
               >
                 Clear all filters

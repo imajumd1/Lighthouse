@@ -4,8 +4,8 @@
  */
 
 const API_BASE_URL = typeof window !== 'undefined'
-  ? (window as any).NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com/api')
-  : (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com/api');
+  ? (window as any).NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com')
+  : (process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://lighthouse-newbackend.onrender.com');
 
 interface ApiError {
   error: string;

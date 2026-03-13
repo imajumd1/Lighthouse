@@ -96,12 +96,13 @@ For each trend you identify, provide:
 2. Keywords: 5-8 key terms that define this trend (e.g., "LLM", "fine-tuning", "enterprise adoption")
 3. Executive Summary: 3-4 bullet points explaining why this trend matters
 4. Comprehensive Analysis: 3-4 paragraphs providing deep strategic insights
-5. The trend category (e.g., "Model Development", "Enterprise Adoption", "Regulation", "Infrastructure", "Market Dynamics")
-6. Time horizon (Immediate: 0-6 months, Near-term: 6-18 months, Long-term: 18+ months)
-7. Confidence score (1-10) based on signal strength
-8. Strategic impact (business implications)
-9. Key risk factors
-10. Source article numbers that support this trend (reference the article numbers from the input)
+5. Consulting Leverage: Detailed, actionable recommendations for how consultancies can capitalize on this trend (4-6 specific action items)
+6. The trend category (e.g., "Model Development", "Enterprise Adoption", "Regulation", "Infrastructure", "Market Dynamics")
+7. Time horizon (Immediate: 0-6 months, Near-term: 6-18 months, Long-term: 18+ months)
+8. Confidence score (1-10) based on signal strength
+9. Strategic impact (business implications)
+10. Key risk factors
+11. Source article numbers that support this trend (reference the article numbers from the input)
 
 Focus on trends that are:
 - Actionable for business leaders
@@ -127,6 +128,7 @@ Return a JSON object with a "trends" key containing an array of trend objects. U
       "trendCategory": "Category name",
       "justificationSummary": "• Bullet point 1\\n• Bullet point 2\\n• Bullet point 3",
       "whyTrend": "One sentence on why this matters",
+      "howConsultanciesLeverage": "Detailed actionable recommendations:\\n1. Specific action item with clear steps\\n2. Another concrete recommendation\\n3. Third actionable strategy\\n4. Fourth tactical approach\\n5. Fifth implementation step\\n6. Sixth opportunity to capitalize on",
       "analysisDetail": "Comprehensive 2-3 paragraph analysis with strategic insights. Keep concise.",
       "timeHorizon": "Immediate|Near-term|Long-term",
       "confidenceScore": 8,
@@ -203,7 +205,9 @@ IMPORTANT: Keep analysisDetail, strategicImpact, and riskGovernance concise to a
                 # Set default values for missing fields
                 trend.setdefault('keywords', [])
                 trend.setdefault('justificationSummary', trend.get('whyTrend', ''))
-                trend.setdefault('howConsultanciesLeverage', 'Strategic advisory and implementation services')
+                # Only set default if not provided by AI
+                if not trend.get('howConsultanciesLeverage'):
+                    trend['howConsultanciesLeverage'] = 'Consultancies can provide strategic advisory and implementation services to help organizations capitalize on this trend.'
                 trend.setdefault('analysisDetail', trend.get('strategicImpact', ''))
                 newline_char = '\n'
                 article_count = len(article_summaries_str.split(newline_char))

@@ -295,7 +295,7 @@ export default function AdminDashboard() {
 
               {/* Heat Map Scores */}
               <div className="bg-slate-800/50 rounded-xl p-6 border border-white/5">
-                <h3 className="text-sm font-semibold text-white mb-4">AI Disruption Heat Map Scores (1-10)</h3>
+                <h3 className="text-sm font-semibold text-white mb-4">Trend Metric Scores (1-10)</h3>
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                   <div>
                     <label className="block text-xs text-slate-400 mb-1">Capability Maturity</label>
